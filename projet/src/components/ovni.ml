@@ -18,8 +18,8 @@ let create id x y =
   let ctx = Gfx.get_context (Global.window ()) in
   let surface = Gfx.get_resource (Global.get_texture Ovni) in
   ovni#texture#set
-    (Texture.image_from_surface ctx surface 0 0 100 100 Global.ovni_l
-       Global.ovni_l );
+    (Texture.anim_from_surface ctx surface 6 32 32 Global.ovni_l
+       Global.ovni_l 10);
 
   Collision_system.register (ovni :> collidable);
   Forces_system.register (ovni :> collidable);

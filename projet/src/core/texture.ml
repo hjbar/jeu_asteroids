@@ -31,7 +31,7 @@ let anim_from_surface ctx surface n w h dw dh frame_duration =
 
 let load_all () =
   let ctx = Gfx.get_context (Global.window ()) in
-  Global.set_texture Ovni (Gfx.load_image ctx "resources/images/voiture.png")
+  Global.set_texture Ovni (Gfx.load_image ctx "resources/images/fusee_anim.png")
 
 let wait_all _dt = Global.textures_are_ready ()
 
