@@ -8,7 +8,7 @@ let create id x y =
 
   ovni#id#set id;
   ovni#pos#set Vector.{ x = float x; y = float y };
-  ovni#rect#set Rect.{ width = Global.ovni_l; height = Global.ovni_l };
+  ovni#rect#set Rect.{ width = Global.ovni_w; height = Global.ovni_h };
   ovni#mass#set 100.;
   ovni#drag#set 0.02;
   ovni#rebound#set 0.;
@@ -18,8 +18,8 @@ let create id x y =
   let ctx = Gfx.get_context (Global.window ()) in
   let surface = Gfx.get_resource (Global.get_texture Ovni) in
   ovni#texture#set
-    (Texture.anim_from_surface ctx surface 6 32 32 Global.ovni_l
-       Global.ovni_l 10);
+    (Texture.anim_from_surface ctx surface 6 19 32 Global.ovni_w
+       Global.ovni_h 10);
 
   Collision_system.register (ovni :> collidable);
   Forces_system.register (ovni :> collidable);

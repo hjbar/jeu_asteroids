@@ -27,7 +27,7 @@ let create_asteroid x y =
 
 (* Les différents paterns des asteroids *)
 let pattern_1 () =
-  let space = (Global.ovni_l / 2) + 10 + asteroid_l in
+  let space = (Global.ovni_w / 2) + 10 + asteroid_l in
   let nb = Global.width / space in
   let rand = Random.int nb in
   let speed = Vector.{ x = 0.; y = 0.1 } in

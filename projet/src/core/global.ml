@@ -23,7 +23,8 @@ let big_font = Gfx.load_font "monospace" "" 256
 let wall_l = 80
 
 (* OVNI *)
-let ovni_l = 50
+let ovni_w = 42
+let ovni_h = 70
 
 (* GRAVITY *)
 let gravity, set_gravity =
