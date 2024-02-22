@@ -1,0 +1,4 @@
+_build
+*.exe
+game_js.bc-for-jsoo
+game_js.bc.js
