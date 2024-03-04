@@ -15,15 +15,20 @@ let uid =
     end
 
 let create_asteroid x y =
-  let uid = uid () in
-  let id = Printf.sprintf "asteroid_%d" uid in
   let l = asteroid_l in
   let mass = 10000. in
   let drag = 0. in
   let rebound = 0.5 in
-  ( uid
-  , Box.create id x y l l mass drag rebound Asteroid
-      (Texture.color (Gfx.color 0 255 0 255)) )
+  let ctx = Gfx.get_context (Global.window ()) in
+  let surface = Gfx.get_resource (Global.get_texture Asteroid) in
+  let texture = Texture.image_from_surface ctx surface 0 0 32 32 l l in
+
+  let create x y =
+    let uid = uid () in
+    let id = Printf.sprintf "asteroid_%d" uid in
+    (uid, Box.create id x y l l mass drag rebound Asteroid texture)
+  in
+  create x y
 
 (* Les différents paterns des asteroids *)
 let pattern_1 () =

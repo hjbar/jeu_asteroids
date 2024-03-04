@@ -5,6 +5,7 @@ type object_type_def =
   | Collidable
   | Asteroid
   | Ovni
+  | Laser
   | Wall
   | Wall_bot
   | Screen

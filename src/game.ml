@@ -2,10 +2,11 @@ open System_defs
 open Component_defs
 
 (* On crée une fenêtre *)
-let () =
+let init_window _dt =
   Global.init
     (Format.sprintf "game_canvas:%dx%d:r=presentvsync" Global.width
-       Global.height )
+       Global.height );
+  false
 
 (* On crée la config *)
 type config =
@@ -13,6 +14,7 @@ type config =
   ; down : string
   ; left : string
   ; right : string
+  ; space : string
   }
 
 let has_key, set_key, unset_key =
@@ -55,8 +57,12 @@ let update config dt =
 
   Ovni.set_sum_forces Vector.{ x = !dx; y = !dy };
 
+  (* On update les lasers *)
+  if has_key config.space && Global.allow_to_shoot () then Laser.create ();
+
   (* On update le reste du jeu *)
   Asteroid.remove_old_asteroids ();
+  Laser.remove_old_lasers ();
   Scoring.update_scoring ();
   Ecs.System.update_all dt;
   Print.print ();
@@ -65,8 +71,22 @@ let update config dt =
     Print.game_over ();
     false )
 
+(* Fonction utilitaire pour gérer Gfx.main_loop *)
+let chain_functions l =
+  let todo = ref l in
+  fun dt ->
+    match !todo with
+    | [] -> false
+    | f :: ll ->
+      let res = f dt in
+      if res then true
+      else begin
+        todo := ll;
+        true
+      end
+
 (* On lance le jeu *)
 let run config =
-  Texture.load ();
-  Gfx.main_loop init;
-  Gfx.main_loop (update config)
+  Gfx.main_loop
+    (chain_functions
+       [ init_window; Texture.load_all; Texture.wait_all; init; update config ] )

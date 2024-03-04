@@ -23,8 +23,9 @@ let big_font = Gfx.load_font "monospace" "" 256
 let wall_l = 80
 
 (* OVNI *)
-let ovni_w = 42
-let ovni_h = 70
+let ovni_w, ovni_h =
+  let factor = 2.5 in
+  (int_of_float (19. *. factor), int_of_float (32. *. factor))
 
 (* GRAVITY *)
 let gravity, set_gravity =
@@ -45,7 +46,7 @@ let get_wave, incr_wave =
 type kind_texture =
   | Ovni
   | Asteroid
-  | Bullet
+  | Laser
 
 let get_texture, set_texture, textures_are_ready =
   let (htbl : (kind_texture, Gfx.surface Gfx.resource) Hashtbl.t) =
@@ -59,14 +60,22 @@ let get_texture, set_texture, textures_are_ready =
         htbl false )
 
 (* HP *)
-let get_hp, alive, incr_hp, decr_hp =
+let get_hp, alive, incr_hp, decr_hp, decr_hp_timer =
   let hp = ref 5 in
+  let timer = ref 0 in
   ( (fun () -> !hp)
   , (fun () -> !hp > 0)
   , (fun () -> incr hp)
-  , let dt0 = ref 0. in
-    fun dt ->
-      if dt -. !dt0 > 2000. then begin
+  , (fun () ->
+      if !timer = 0 then begin
         decr hp;
-        dt0 := dt
+        timer := 120
       end )
+  , fun () -> if !timer > 0 then decr timer )
+
+(* Laser *)
+let allow_to_shoot, reset_laser_timer, decr_laser_timer =
+  let timer = ref 0 in
+  ( (fun () -> !timer = 0)
+  , (fun () -> timer := 20)
+  , fun () -> if !timer > 0 then decr timer )

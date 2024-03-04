@@ -54,7 +54,7 @@ let update dt el =
             then begin
               (* modif hp *)
               begin
-                if ovni_is_in_mortal_collision e1 e2 then Global.decr_hp dt
+                if ovni_is_in_mortal_collision e1 e2 then Global.decr_hp ()
               end;
               (* [3] le plus petit des vecteurs a b c d *)
               let a = Vector.{ x = s_pos.x; y = 0.0 } in
