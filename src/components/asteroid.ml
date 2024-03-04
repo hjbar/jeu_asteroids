@@ -3,7 +3,7 @@ open Component_defs
 
 let (asteroids : (int, Component_defs.box) Hashtbl.t) = Hashtbl.create 16
 
-let asteroid_l = 25
+let asteroid_l = 60
 
 let uid =
   let cpt = ref (-1) in
@@ -15,20 +15,18 @@ let uid =
     end
 
 let create_asteroid x y =
+  let uid = uid () in
+  let id = Printf.sprintf "asteroid_%d" uid in
   let l = asteroid_l in
   let mass = 10000. in
   let drag = 0. in
   let rebound = 0.5 in
+
   let ctx = Gfx.get_context (Global.window ()) in
   let surface = Gfx.get_resource (Global.get_texture Asteroid) in
   let texture = Texture.image_from_surface ctx surface 0 0 32 32 l l in
 
-  let create x y =
-    let uid = uid () in
-    let id = Printf.sprintf "asteroid_%d" uid in
-    (uid, Box.create id x y l l mass drag rebound Asteroid texture)
-  in
-  create x y
+  (uid, Box.create id x y l l mass drag rebound Asteroid texture)
 
 (* Les différents paterns des asteroids *)
 let pattern_1 () =
@@ -69,6 +67,10 @@ let remove_old_asteroids =
       (3 * Global.height / 4)
       Global.width (Global.height / 2)
   in
+
+  let asteroids_required =
+    (Global.width / asteroid_l) - (Global.width / asteroid_l / 2)
+  in
   (* si collision avec zone d'affichage, alors ils sont encore visibles donc on les garde
      sinon ils sont hors écrans et on les vire *)
   fun () ->
@@ -96,5 +98,5 @@ let remove_old_asteroids =
           Move_system.unregister (v :> movable);
           Gc.full_major () )
         old;
-      if !cpt < 16 then init_asteroids ()
+      if !cpt < asteroids_required then init_asteroids ()
     end

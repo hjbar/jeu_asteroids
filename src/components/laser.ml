@@ -17,35 +17,34 @@ let uid =
     end
 
 let create () =
-  let dif_x = float (Global.ovni_w / 2) -. float (laser_larg / 2) in
-  let dif_y = -.float laser_long in
+  let uid = uid () in
+  let id = Printf.sprintf "laser_%d" uid in
   let x = 0 in
   let y = 0 in
   let mass = infinity in
   let drag = 0. in
   let rebound = 0. in
-  let speed = Vector.{ x = 0.; y = -1. } in
+
   let ctx = Gfx.get_context (Global.window ()) in
   let surface = Gfx.get_resource (Global.get_texture Laser) in
   let texture =
     Texture.anim_from_surface ctx surface 3 3 32 laser_larg laser_long 5
   in
-  let laser () =
-    let uid = uid () in
-    let id = Printf.sprintf "laser_%d" uid in
-    let laser =
-      Box.create id x y laser_larg laser_long mass drag rebound Laser texture
-    in
 
-    let x = Ovni.get_x () +. dif_x in
-    let y = Ovni.get_y () +. dif_y in
-    laser#pos#set Vector.{ x; y };
-
-    laser#velocity#set speed;
-
-    Hashtbl.replace lasers uid laser
+  let laser =
+    Box.create id x y laser_larg laser_long mass drag rebound Laser texture
   in
-  laser ();
+
+  let dif_x = float (Global.ovni_w / 2) -. float (laser_larg / 2) in
+  let dif_y = -.float laser_long in
+  let x = Ovni.get_x () +. dif_x in
+  let y = Ovni.get_y () +. dif_y in
+  laser#pos#set Vector.{ x; y };
+
+  let speed = Vector.{ x = 0.; y = -1. } in
+  laser#velocity#set speed;
+
+  Hashtbl.replace lasers uid laser;
   Global.reset_laser_timer ()
 
 (* Maj les lasers *)

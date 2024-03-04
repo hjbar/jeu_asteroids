@@ -60,7 +60,7 @@ let get_texture, set_texture, textures_are_ready =
         htbl false )
 
 (* HP *)
-let get_hp, alive, incr_hp, decr_hp, decr_hp_timer =
+let get_hp, alive, incr_hp, decr_hp, decr_hp_timer, is_invisible =
   let hp = ref 5 in
   let timer = ref 0 in
   ( (fun () -> !hp)
@@ -71,7 +71,8 @@ let get_hp, alive, incr_hp, decr_hp, decr_hp_timer =
         decr hp;
         timer := 120
       end )
-  , fun () -> if !timer > 0 then decr timer )
+  , (fun () -> if !timer > 0 then decr timer)
+  , fun () -> !timer > 0 )
 
 (* Laser *)
 let allow_to_shoot, reset_laser_timer, decr_laser_timer =

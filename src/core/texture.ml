@@ -30,16 +30,12 @@ let anim_from_surface ctx surface n w h dw dh frame_duration =
 (* Fonctions pour load les textures *)
 
 let load_all _dt =
-  Gfx.debug "debut load_all\n%!";
-
   let ctx = Gfx.get_context (Global.window ()) in
 
   Global.set_texture Ovni (Gfx.load_image ctx "resources/anims/fusee.png");
   Global.set_texture Laser (Gfx.load_image ctx "resources/anims/laser.png");
   Global.set_texture Asteroid
     (Gfx.load_image ctx "resources/images/asteroid.png");
-
-  Gfx.debug "fin load_all\n%!";
 
   false
 

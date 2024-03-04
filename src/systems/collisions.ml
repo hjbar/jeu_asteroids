@@ -7,18 +7,43 @@ let init _ = ()
 let is_wall e =
   match e#object_type#get with Wall | Wall_bot -> true | _ -> false
 
+let is_wall_bot e = e#object_type#get = Wall_bot
+
+let is_ovni e = e#object_type#get = Ovni
+
+let is_asteroid e = e#object_type#get = Asteroid
+
+let is_laser e = e#object_type#get = Laser
+
 let ovni_is_in_mortal_collision e1 e2 =
-  (e1#object_type#get = Ovni && e2#object_type#get = Asteroid)
-  || (e1#object_type#get = Asteroid && e2#object_type#get = Ovni)
-  || (e1#object_type#get = Ovni && e2#object_type#get = Wall_bot)
-  || (e1#object_type#get = Wall_bot && e2#object_type#get = Ovni)
+  (is_ovni e1 && is_asteroid e2)
+  || (is_asteroid e1 && is_ovni e2)
+  || (is_ovni e1 && is_wall_bot e2)
+  || (is_wall_bot e1 && is_ovni e2)
+
+let is_collision_between_laser_and_asteroid e1 e2 =
+  (is_laser e1 && is_asteroid e2) || (is_asteroid e1 && is_laser e2)
 
 let is_not_collision_between_asteroid_and_wall e1 e2 =
-  let b =
-    (e1#object_type#get = Asteroid && is_wall e2)
-    || (is_wall e1 && e2#object_type#get = Asteroid)
-  in
+  let b = (is_asteroid e1 && is_wall e2) || (is_wall e1 && is_asteroid e2) in
   not b
+
+let is_not_collision_between_laser_and_wall e1 e2 =
+  let b = (is_laser e1 && is_wall e2) || (is_wall e1 && is_laser e2) in
+  not b
+
+let is_not_collision_between_ovni_and_wall e1 e2 =
+  let b = (is_ovni e1 && is_wall e2) || (is_wall e1 && is_ovni e2) in
+  not b
+
+let is_not_invisible () =
+  let b = Global.is_invisible () in
+  not b
+
+let pass e1 e2 =
+  ( (Global.is_invisible () && is_ovni e1 && is_wall e2)
+  || (is_wall e1 && is_ovni e2) )
+  || not (Global.is_invisible ())
 
 let update dt el =
   Seq.iteri
@@ -39,6 +64,8 @@ let update dt el =
             j > i
             && (Float.is_finite m1 || Float.is_finite m2)
             && is_not_collision_between_asteroid_and_wall e1 e2
+            && is_not_collision_between_laser_and_wall e1 e2
+            && pass e1 e2
           then begin
             (* les composants du rectangle r2 *)
             let pos2 = e2#pos#get in
@@ -53,9 +80,12 @@ let update dt el =
               && not (Vector.is_zero v1 && Vector.is_zero v2)
             then begin
               (* modif hp *)
-              begin
-                if ovni_is_in_mortal_collision e1 e2 then Global.decr_hp ()
-              end;
+              if ovni_is_in_mortal_collision e1 e2 then Global.decr_hp ();
+
+              (* On brise en 4 l'asteroid si possible et on supprime le laser *)
+              if is_collision_between_laser_and_asteroid e1 e2 then
+                Gfx.debug "Collision between laser and asteroid todo\n%!";
+
               (* [3] le plus petit des vecteurs a b c d *)
               let a = Vector.{ x = s_pos.x; y = 0.0 } in
               let b = Vector.{ x = float s_rect.width +. s_pos.x; y = 0.0 } in

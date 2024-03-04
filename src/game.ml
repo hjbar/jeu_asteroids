@@ -64,6 +64,7 @@ let update config dt =
   Asteroid.remove_old_asteroids ();
   Laser.remove_old_lasers ();
   Scoring.update_scoring ();
+  Timer.update_all ();
   Ecs.System.update_all dt;
   Print.print ();
   if Global.alive () then true

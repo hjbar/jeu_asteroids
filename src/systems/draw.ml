@@ -40,7 +40,4 @@ let update _dt el =
         Gfx.blit_scale ctx win_surf surface x y width height )
     el;
 
-  Global.decr_hp_timer ();
-  Global.decr_laser_timer ();
-
   Gfx.commit ctx
