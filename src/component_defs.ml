@@ -124,3 +124,20 @@ class box =
 
     inherit id
   end
+
+class box_collection =
+  object (self)
+    val table : (string, box) Hashtbl.t = Hashtbl.create 16
+
+    method length = Hashtbl.length table
+
+    method replace (id : string) (e : box) : unit = Hashtbl.replace table id e
+
+    method remove (id : string) : unit = Hashtbl.remove table id
+
+    method table : (string, box) Hashtbl.t = table
+
+    method unregister (e : box) =
+      self#remove e#id#get;
+      e#pos#set Vector.{ x = -100.; y = -100. }
+  end

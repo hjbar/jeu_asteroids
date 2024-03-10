@@ -1,8 +1,6 @@
 open System_defs
 open Component_defs
 
-let (asteroids : (int, Component_defs.box) Hashtbl.t) = Hashtbl.create 16
-
 let asteroid_l = 60
 
 let uid =
@@ -26,7 +24,7 @@ let create_asteroid x y =
   let surface = Gfx.get_resource (Global.get_texture Asteroid) in
   let texture = Texture.image_from_surface ctx surface 0 0 32 32 l l in
 
-  (uid, Box.create id x y l l mass drag rebound Asteroid texture)
+  (id, Box.create id x y l l mass drag rebound Asteroid texture)
 
 (* Les différents paterns des asteroids *)
 let pattern_1 () =
@@ -41,7 +39,8 @@ let pattern_1 () =
         create_asteroid (!x + Random.int 5) (Random.int 25 - 25 - asteroid_l)
       in
       ast#velocity#set speed;
-      Hashtbl.replace asteroids id ast
+      Box_collection.asteroids#replace id ast
+      (* Hashtbl.replace Global.asteroids_table id ast *)
     end;
     x := !x + space
   done
@@ -75,7 +74,8 @@ let remove_old_asteroids =
      sinon ils sont hors écrans et on les vire *)
   fun () ->
     begin
-      let cpt = ref (Hashtbl.length asteroids) in
+      let cpt = ref Box_collection.asteroids#length in
+      (* let cpt = ref (Hashtbl.length Global.asteroids_table) in *)
       let old =
         Hashtbl.fold
           (fun k v init ->
@@ -87,12 +87,13 @@ let remove_old_asteroids =
               Rect.intersect v#pos#get v#rect#get screen#pos#get screen#rect#get
             then init
             else (k, v) :: init )
-          asteroids []
+          (* Global.asteroids_table *) Box_collection.asteroids#table []
       in
       List.iter
         (fun (k, v) ->
-          Hashtbl.remove asteroids k;
-          Collision_system.unregister (v :> collidable);
+          (* Hashtbl.remove Global.asteroids_table k; *)
+          Box_collection.asteroids#remove k;
+          Collision_system.unregister v;
           Forces_system.unregister (v :> collidable);
           Draw_system.unregister (v :> drawable);
           Move_system.unregister (v :> movable);

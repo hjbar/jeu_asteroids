@@ -1,8 +1,6 @@
 open Component_defs
 open System_defs
 
-let (lasers : (int, Component_defs.box) Hashtbl.t) = Hashtbl.create 16
-
 let laser_long = 10 * 3
 
 let laser_larg = 2 * 3
@@ -44,7 +42,8 @@ let create () =
   let speed = Vector.{ x = 0.; y = -1. } in
   laser#velocity#set speed;
 
-  Hashtbl.replace lasers uid laser;
+  Box_collection.lasers#replace id laser;
+  (* Hashtbl.replace Global.lasers_table uid laser; *)
   Global.reset_laser_timer ()
 
 (* Maj les lasers *)
@@ -66,12 +65,13 @@ let remove_old_lasers =
               Rect.intersect v#pos#get v#rect#get screen#pos#get screen#rect#get
             then init
             else (k, v) :: init )
-          lasers []
+          (* Global.lasers_table *) Box_collection.lasers#table []
       in
       List.iter
         (fun (k, v) ->
-          Hashtbl.remove lasers k;
-          Collision_system.unregister (v :> collidable);
+          (* Hashtbl.remove Global.lasers_table k; *)
+          Box_collection.lasers#remove k;
+          Collision_system.unregister v;
           Forces_system.unregister (v :> collidable);
           Draw_system.unregister (v :> drawable);
           Move_system.unregister (v :> movable);

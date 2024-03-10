@@ -21,7 +21,7 @@ let create id x y =
     (Texture.anim_from_surface ctx surface 6 19 32 Global.ovni_w Global.ovni_h
        10 );
 
-  Collision_system.register (ovni :> collidable);
+  Collision_system.register ovni;
   Forces_system.register (ovni :> collidable);
   Draw_system.register (ovni :> drawable);
   Move_system.register (ovni :> movable);
