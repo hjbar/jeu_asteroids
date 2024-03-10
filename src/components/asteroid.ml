@@ -1,8 +1,6 @@
 open System_defs
 open Component_defs
 
-let asteroid_l = 60
-
 let uid =
   let cpt = ref (-1) in
   fun () ->
@@ -12,10 +10,8 @@ let uid =
       !cpt
     end
 
-let create_asteroid x y =
-  let uid = uid () in
-  let id = Printf.sprintf "asteroid_%d" uid in
-  let l = asteroid_l in
+let create_asteroid x y id speed =
+  let l = Global.asteroid_size in
   let mass = 10000. in
   let drag = 0. in
   let rebound = 0.5 in
@@ -24,22 +20,24 @@ let create_asteroid x y =
   let surface = Gfx.get_resource (Global.get_texture Asteroid) in
   let texture = Texture.image_from_surface ctx surface 0 0 32 32 l l in
 
-  (id, Box.create id x y l l mass drag rebound Asteroid texture)
+  let ast = Box.create id x y l l mass drag rebound Asteroid texture in
+  ast#velocity#set speed;
+  Box_collection.asteroids#replace id ast
 
 (* Les différents paterns des asteroids *)
 let pattern_1 () =
-  let space = (Global.ovni_w / 2) + 10 + asteroid_l in
+  let space = (Global.ovni_w / 2) + 10 + Global.asteroid_size in
   let nb = Global.width / space in
   let rand = Random.int nb in
   let speed = Vector.{ x = 0.; y = 0.1 } in
-  let x = ref ((10 + asteroid_l) / 2) in
+  let x = ref ((10 + Global.asteroid_size) / 2) in
   for i = 0 to nb - 1 do
     if i <> rand then begin
-      let id, ast =
-        create_asteroid (!x + Random.int 5) (Random.int 25 - 25 - asteroid_l)
-      in
-      ast#velocity#set speed;
-      Box_collection.asteroids#replace id ast
+      let id = Printf.sprintf "asteroids_%d" (uid ()) in
+      create_asteroid
+        (!x + Random.int 5)
+        (Random.int 25 - 25 - Global.asteroid_size)
+        id speed
       (* Hashtbl.replace Global.asteroids_table id ast *)
     end;
     x := !x + space
@@ -52,6 +50,15 @@ let init_asteroids () =
   Global.incr_wave ();
   let rand = Random.int (Array.length paterns) in
   paterns.(rand) ()
+
+(* division d'asteroids *)
+let add_new_asteroids () =
+  List.iter
+    (fun (id, dir, (x, y)) ->
+      create_asteroid (int_of_float x) (int_of_float y) id
+        Vector.{ x = dir; y = 0.2 +. Float.abs dir } )
+    !Global.asteroids_to_add;
+  Global.reset_asteroids_to_add ()
 
 (* Maj les asteorids *)
 let remove_old_asteroids =
@@ -68,12 +75,14 @@ let remove_old_asteroids =
   in
 
   let asteroids_required =
-    (Global.width / asteroid_l) - (Global.width / asteroid_l / 2)
+    (Global.width / Global.asteroid_size)
+    - (Global.width / Global.asteroid_size / 2)
   in
   (* si collision avec zone d'affichage, alors ils sont encore visibles donc on les garde
      sinon ils sont hors écrans et on les vire *)
   fun () ->
     begin
+      add_new_asteroids ();
       let cpt = ref Box_collection.asteroids#length in
       (* let cpt = ref (Hashtbl.length Global.asteroids_table) in *)
       let old =

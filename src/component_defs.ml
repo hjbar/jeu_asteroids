@@ -125,9 +125,13 @@ class box =
     inherit id
   end
 
-class box_collection =
+class box_collection (b : bool) =
   object (self)
     val table : (string, box) Hashtbl.t = Hashtbl.create 16
+
+    val mutable is_asteroid : bool = false
+
+    initializer is_asteroid <- b
 
     method length = Hashtbl.length table
 
@@ -138,6 +142,17 @@ class box_collection =
     method table : (string, box) Hashtbl.t = table
 
     method unregister (e : box) =
-      self#remove e#id#get;
-      e#pos#set Vector.{ x = -100.; y = -100. }
+      if Hashtbl.mem table e#id#get then begin
+        let x, y = (e#pos#get.x, e#pos#get.y) in
+        self#remove e#id#get;
+        e#pos#set Vector.{ x = -100.; y = -100. };
+        if is_asteroid then begin
+          let ast_size = float Global.asteroid_size in
+          let y = y +. ast_size in
+          (* ajout des 3 asteroides *)
+          Global.add_asteroid (e#id#get ^ "0") (-0.6) (x -. (1.5 *. ast_size), y);
+          Global.add_asteroid (e#id#get ^ "1") 0. (x, y);
+          Global.add_asteroid (e#id#get ^ "2") 0.3 (x +. (1.5 *. ast_size), y)
+        end
+      end
   end

@@ -27,6 +27,9 @@ let ovni_w, ovni_h =
   let factor = 2.5 in
   (int_of_float (19. *. factor), int_of_float (32. *. factor))
 
+(* ASTEROIDS *)
+let asteroid_size = 60
+
 (* GRAVITY *)
 let gravity, set_gravity =
   let gravity_r = ref 0.015 in
@@ -80,3 +83,11 @@ let allow_to_shoot, reset_laser_timer, decr_laser_timer =
   ( (fun () -> !timer = 0)
   , (fun () -> timer := 20)
   , fun () -> if !timer > 0 then decr timer )
+
+(* (id, dir, (x, y)) *)
+let asteroids_to_add : (string * float * (float * float)) list ref = ref []
+
+let add_asteroid id dir pos =
+  asteroids_to_add := (id, dir, pos) :: !asteroids_to_add
+
+let reset_asteroids_to_add () = asteroids_to_add := []
