@@ -10,7 +10,7 @@ let uid =
       !cpt
     end
 
-let create_asteroid x y id =
+let rec create_asteroid x y id =
   let l = Global.asteroid_size in
   let mass = 10000. in
   let drag = 0. in
@@ -21,15 +21,23 @@ let create_asteroid x y id =
   let texture = Texture.image_from_surface ctx surface 0 0 32 32 l l in
 
   let ast = Box.create id x y l l mass drag rebound Asteroid texture in
-  ast#velocity#set speed;
   let f = ast#remove#get in
   ast#remove#set (fun () -> f ();
   if ast#is_dead#get then
     let ast_size = Global.asteroid_size in
-    create_asteroid (x - ast_size) (y+ast_size) (id ^ "_0") Vector.{ x = -0.6; y = 0.2 +. 0.6 };
-    create_asteroid (x) (y + ast_size) (id ^ "_1") Vector.{ x = 0.0; y = 0.2 };
-    create_asteroid (x + (ast_size)) (y+ ast_size) (id ^ "_1") Vector.{ x = 0.6; y = 0.2 +. 0.6 });
-  Box_collection.asteroids#replace id ast
+    let x = int_of_float ast#pos#get.x in
+    let y = int_of_float ast#pos#get.y in
+    create_asteroid_with_sumforces (x - ast_size) (y+ast_size) (id ^ "_0") Vector.{ x = -0.6; y = 0.2 +. 0.6 };
+    create_asteroid_with_sumforces (x) (y + ast_size) (id ^ "_1") Vector.{ x = 0.0; y = 0.2 };
+    create_asteroid_with_sumforces (x + (ast_size)) (y+ ast_size) (id ^ "_1") Vector.{ x = 0.6; y = 0.2 +. 0.6 });
+  Box_collection.asteroids#replace id ast;
+  ast
+and create_asteroid_with_velocity x y id velocity =
+  let ast = create_asteroid x y id in
+  ast#velocity#set velocity
+and create_asteroid_with_sumforces x y id sum_forces =
+  let ast = create_asteroid x y id in
+  ast#sum_forces#set sum_forces
 
 (* Les différents paterns des asteroids *)
 let pattern_1 () =

@@ -85,13 +85,12 @@ let update dt el =
 
               (* On brise en 4 l'asteroid si possible et on supprime le laser *)
               if is_collision_between_laser_and_asteroid e1 e2 then (
-                if e1#object_type#get = Asteroid then
-                  (*
+                if e1#object_type#get = Asteroid then(
                   Box_collection.lasers#unregister e2;
                   Box_collection.asteroids#unregister e1)
                 else (
                   Box_collection.lasers#unregister e1;
-                  Box_collection.asteroids#unregister e2)
+                  Box_collection.asteroids#unregister e2))
               else
                 (* [3] le plus petit des vecteurs a b c d *)
                 let a = Vector.{ x = s_pos.x; y = 0.0 } in
@@ -158,7 +157,7 @@ let update dt el =
                   let new_v2 = Vector.sub v2 (Vector.mult (j /. m2) n) in
                   (* [9] mise à jour des vitesses *)
                   e1#velocity#set new_v1;
-                  e2#velocity#set new_v2 )
+                  e2#velocity#set new_v2
             end
           end )
         el )
