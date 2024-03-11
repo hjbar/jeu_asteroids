@@ -22,7 +22,7 @@ let create () =
   let id = Printf.sprintf "laser_%d" uid in
   let x = 0 in
   let y = 0 in
-  let mass = infinity in
+  let mass = 1. in
   let drag = 0. in
   let rebound = 0. in
 
@@ -42,7 +42,7 @@ let create () =
   let y = Ovni.get_y () +. dif_y in
   laser#pos#set Vector.{ x; y };
 
-  let speed = Vector.{ x = 0.; y = -1. } in
+  let speed = Vector.{ x = 0.; y = -0.75 } in
   laser#velocity#set speed;
 
   Box_collection.lasers#replace id laser;

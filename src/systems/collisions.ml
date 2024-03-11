@@ -4,6 +4,8 @@ type t = box
 
 let init _ = ()
 
+let unregister = ref false
+
 let is_wall e =
   match e#object_type#get with Wall | Wall_bot -> true | _ -> false
 
@@ -84,13 +86,17 @@ let update dt el =
               if ovni_is_in_mortal_collision e1 e2 then Ovni.decr_hp ();
 
               (* On brise en 4 l'asteroid si possible et on supprime le laser *)
-              if is_collision_between_laser_and_asteroid e1 e2 then
+              if
+                is_collision_between_laser_and_asteroid e1 e2 && not !unregister
+              then begin
                 if e1#object_type#get = Asteroid then (
                   Box_collection.lasers#unregister e2;
                   Box_collection.asteroids#unregister e1 )
                 else (
                   Box_collection.lasers#unregister e1;
-                  Box_collection.asteroids#unregister e2 )
+                  Box_collection.asteroids#unregister e2 );
+                unregister := true
+              end
               else
                 (* [3] le plus petit des vecteurs a b c d *)
                 let a = Vector.{ x = s_pos.x; y = 0.0 } in
@@ -166,4 +172,5 @@ let update dt el =
 let update dt el =
   for i = 0 to 3 do
     update dt el
-  done
+  done;
+  unregister := false

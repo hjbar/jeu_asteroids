@@ -17,7 +17,7 @@ let rec create_asteroid x y id level =
   let l =
     [| int_of_float (float l *. 0.6); int_of_float (float l *. 0.8); l |].(level)
   in
-  let mass = [| 10.; 100.; 10000. |].(level) in
+  let mass = [| 10.; 100.; 1000. |].(level) in
   let drag = 0. in
   let rebound = 0.5 in
 
@@ -27,24 +27,43 @@ let rec create_asteroid x y id level =
 
   let ast = Box.create id x y l l mass drag rebound Asteroid texture in
   let f = ast#remove#get in
+  ast#hp#set [| 1; 2; 4 |].(level);
+  ast#level#set level;
+
+  ast#under_gravity#set [| true; true; false |].(level);
+
   ast#remove#set (fun () ->
       f ();
-      if ast#is_dead#get then (
+      if ast#is_dead#get then
         let ast_size = Global.asteroid_size in
+
         let x = int_of_float ast#pos#get.x in
         let y = int_of_float ast#pos#get.y in
-        create_asteroid_with_sumforces (x - ast_size) (y - ast_size) (id ^ "_0")
-          Vector.{ x = -0.5; y = -1. }
-          1;
-        create_asteroid_with_sumforces (x + ast_size) (y - ast_size) (id ^ "_1")
-          Vector.{ x = 0.5; y = -1. }
-          1;
-        create_asteroid_with_sumforces (x - ast_size) (y + ast_size) (id ^ "_2")
-          Vector.{ x = -0.5; y = 1. }
-          1;
-        create_asteroid_with_sumforces (x + ast_size) (y + ast_size) (id ^ "_3")
-          Vector.{ x = 0.5; y = 1. }
-          1 ) );
+
+        let lvl = ast#level#get - 1 in
+
+        let factor = [| 10.; 1. |].(lvl) in
+        let vx = 0.5 /. factor in
+        let vy = 1. /. factor in
+
+        if lvl >= 0 then begin
+          create_asteroid_with_sumforces (x - ast_size) (y - ast_size)
+            (id ^ "_0")
+            Vector.{ x = -1. *. vx; y = -1. *. vy }
+            lvl;
+          create_asteroid_with_sumforces (x + ast_size) (y - ast_size)
+            (id ^ "_1")
+            Vector.{ x = vx; y = -1. *. vy }
+            lvl;
+          create_asteroid_with_sumforces (x - ast_size) (y + ast_size)
+            (id ^ "_2")
+            Vector.{ x = -1. *. vx; y = vy }
+            lvl;
+          create_asteroid_with_sumforces (x + ast_size) (y + ast_size)
+            (id ^ "_3")
+            Vector.{ x = vx; y = vy }
+            lvl
+        end );
   Box_collection.asteroids#replace id ast;
   ast
 
@@ -61,12 +80,12 @@ let pattern_1 () =
   let space = (Global.ovni_w / 2) + 10 + Global.asteroid_size in
   let nb = Global.width / space in
   let rand = Random.int nb in
-  let speed = Vector.{ x = 0.; y = 0.1 } in
+  let speed = Vector.{ x = 0.; y = 3.75 } in
   let x = ref ((10 + Global.asteroid_size) / 2) in
   for i = 0 to nb - 1 do
     if i <> rand then begin
       let id = Printf.sprintf "asteroids_%d" (uid ()) in
-      create_asteroid_with_velocity
+      create_asteroid_with_sumforces
         (!x + Random.int 5)
         (Random.int 25 - 25 - Global.asteroid_size)
         id speed 2

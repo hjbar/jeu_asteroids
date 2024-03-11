@@ -12,7 +12,10 @@ let update _ el =
       let mass = m#mass#get in
       if Float.is_finite mass then begin
         let f = m#sum_forces#get in
-        let gravity = Vector.{ x = 0.0; y = Global.gravity () } in
+        let gravity =
+          if m#under_gravity#get then Vector.{ x = 0.0; y = Global.gravity () }
+          else Vector.{ x = 0.0; y = 0.0 }
+        in
         let f = Vector.add f gravity in
         m#sum_forces#set Vector.zero;
         let a = Vector.mult (1. /. mass) f in

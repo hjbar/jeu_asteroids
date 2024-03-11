@@ -9,6 +9,7 @@ let create id x y w h mass drag rebound obj_type texture =
   box#rect#set Rect.{ width = w; height = h };
   box#mass#set mass;
   box#drag#set drag;
+  box#under_gravity#set false;
   box#rebound#set rebound;
   box#object_type#set obj_type;
   box#texture#set texture;

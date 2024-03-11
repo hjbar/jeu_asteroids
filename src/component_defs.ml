@@ -60,6 +60,13 @@ class sum_forces =
     method sum_forces = sum_forces
   end
 
+class under_gravity =
+  object
+    val under_gravity = Component.def false
+
+    method under_gravity = under_gravity
+  end
+
 class texture =
   object
     val texture = Component.def (Texture.color (Gfx.color 0 0 0 0))
@@ -79,6 +86,13 @@ class rebound =
     val rebound = Component.def 0.
 
     method rebound = rebound
+  end
+
+class level =
+  object
+    val level = Component.def 0
+
+    method level = level
   end
 
 class hp =
@@ -118,6 +132,8 @@ class movable =
     inherit drag
 
     inherit velocity
+
+    inherit under_gravity
   end
 
 class collidable =
@@ -173,6 +189,10 @@ class offscreenable_box =
     inherit box
 
     inherit offscreen
+
+    inherit hp
+
+    inherit level
   end
 
 class ovni =
@@ -207,9 +227,14 @@ class box_collection (b : bool) =
 
     method unregister (e : box) =
       if Hashtbl.mem table e#id#get then begin
-        (* e#pos#set Vector.{ x = -100.; y = -100. }; *)
         let e = Hashtbl.find table e#id#get in
-        e#is_dead#set true;
-        self#remove e#id#get
+
+        if is_asteroid then begin
+          e#hp#set (e#hp#get - 1);
+          e#is_dead#set (e#hp#get <= 0)
+        end
+        else e#is_dead#set true;
+
+        if e#is_dead#get then self#remove e#id#get
       end
   end

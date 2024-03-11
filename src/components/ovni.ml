@@ -13,7 +13,7 @@ let incr_hp () = (ovni ())#hp#set ((ovni ())#hp#get + 1)
 let decr_hp () =
   if (ovni ())#invincible_timer#get = 0 then begin
     (ovni ())#hp#set ((ovni ())#hp#get - 1);
-    (ovni ())#invincible_timer#set 120
+    (ovni ())#invincible_timer#set 160
   end
 
 let is_alive () = (ovni ())#hp#get > 0
