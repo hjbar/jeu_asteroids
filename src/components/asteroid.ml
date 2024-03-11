@@ -10,9 +10,10 @@ let uid =
       !cpt
     end
 
-let rec create_asteroid x y id =
+let rec create_asteroid x y id level =
   let l = Global.asteroid_size in
-  let mass = 10000. in
+  let l = [| int_of_float (float l *. 0.6); int_of_float (float l *. 0.8); l |].(level) in
+  let mass = [| 10.; 100.; 10000. |].(level) in
   let drag = 0. in
   let rebound = 0.5 in
 
@@ -27,16 +28,17 @@ let rec create_asteroid x y id =
     let ast_size = Global.asteroid_size in
     let x = int_of_float ast#pos#get.x in
     let y = int_of_float ast#pos#get.y in
-    create_asteroid_with_sumforces (x - ast_size) (y+ast_size) (id ^ "_0") Vector.{ x = -0.6; y = 0.2 +. 0.6 };
-    create_asteroid_with_sumforces (x) (y + ast_size) (id ^ "_1") Vector.{ x = 0.0; y = 0.2 };
-    create_asteroid_with_sumforces (x + (ast_size)) (y+ ast_size) (id ^ "_1") Vector.{ x = 0.6; y = 0.2 +. 0.6 });
+    create_asteroid_with_sumforces (x - ast_size) (y-ast_size) (id ^ "_0") Vector.{ x = -0.5; y = -1. } 1;
+    create_asteroid_with_sumforces (x + ast_size) (y - ast_size) (id ^ "_1") Vector.{ x = 0.5; y = -1. } 1;
+    create_asteroid_with_sumforces (x - ast_size) (y + ast_size) (id ^ "_2") Vector.{ x = -0.5; y = 1. } 1;
+    create_asteroid_with_sumforces (x + ast_size) (y + ast_size) (id ^ "_3") Vector.{ x = 0.5; y = 1. } 1);
   Box_collection.asteroids#replace id ast;
   ast
-and create_asteroid_with_velocity x y id velocity =
-  let ast = create_asteroid x y id in
+and create_asteroid_with_velocity x y id velocity level =
+  let ast = create_asteroid x y id level in
   ast#velocity#set velocity
-and create_asteroid_with_sumforces x y id sum_forces =
-  let ast = create_asteroid x y id in
+and create_asteroid_with_sumforces x y id sum_forces level =
+  let ast = create_asteroid x y id level in
   ast#sum_forces#set sum_forces
 
 (* Les différents paterns des asteroids *)
@@ -52,7 +54,7 @@ let pattern_1 () =
       create_asteroid_with_velocity
         (!x + Random.int 5)
         (Random.int 25 - 25 - Global.asteroid_size)
-        id speed
+        id speed 2
       (* Hashtbl.replace Global.asteroids_table id ast *)
     end;
     x := !x + space
@@ -65,15 +67,6 @@ let init_asteroids () =
   Global.incr_wave ();
   let rand = Random.int (Array.length paterns) in
   paterns.(rand) ()
-
-(* division d'asteroids *)
-let add_new_asteroids () =
-  List.iter
-    (fun (id, dir, (x, y)) ->
-      create_asteroid_with_sumforces (int_of_float x) (int_of_float y) id
-        Vector.{ x = dir; y = 0.2 +. Float.abs dir } )
-    !Global.asteroids_to_add;
-  Global.reset_asteroids_to_add ()
 
 (* Maj les asteorids *)
 let remove_old_asteroids =
