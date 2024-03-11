@@ -87,10 +87,10 @@ let update dt el =
               if is_collision_between_laser_and_asteroid e1 e2 then
                 if e1#object_type#get = Asteroid then (
                   Box_collection.lasers#unregister e2;
-                  Box_collection.asteroids#unregister e1 )
+                  Box_collection.asteroids#unregister e1)
                 else (
                   Box_collection.lasers#unregister e1;
-                  Box_collection.asteroids#unregister e2 )
+                  Box_collection.asteroids#unregister e2)
               else
                 (* [3] le plus petit des vecteurs a b c d *)
                 let a = Vector.{ x = s_pos.x; y = 0.0 } in

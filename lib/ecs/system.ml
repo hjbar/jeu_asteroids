@@ -28,7 +28,7 @@ end) : S with type t = T.t = struct
 
   let register e = Hashtbl.replace elem_table e ()
 
-  let unregister e = Hashtbl.remove elem_table e
+  let unregister e = if Hashtbl.mem elem_table e then Hashtbl.remove elem_table e else failwith "todo"
 
   let init dt = T.init dt
 

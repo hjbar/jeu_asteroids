@@ -22,3 +22,9 @@ module Draw_system = System.Make (Draw)
 
 let () = System.register (module Draw_system)
 (* Register the system globally *)
+
+module Cancellable_system = System.Make (Cancellable)
+(* Use a functor to define the new system *)
+
+let () = System.register (module Cancellable_system)
+(* Register the system globally *)

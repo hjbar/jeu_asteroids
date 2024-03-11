@@ -115,6 +115,16 @@ class drawable =
 
     inherit texture
   end
+  
+class offscreen = object
+    val is_offscreen = Component.def false
+    val is_dead = Component.def false
+    val remove = Component.def (fun () -> ())
+
+    method is_offscreen = is_offscreen
+    method is_dead = is_dead
+    method remove = remove
+  end
 
 class box =
   object
@@ -125,9 +135,15 @@ class box =
     inherit id
   end
 
+class offscreenable_box =
+  object
+  inherit box
+  inherit offscreen
+  end
+
 class box_collection (b : bool) =
   object (self)
-    val table : (string, box) Hashtbl.t = Hashtbl.create 16
+    val table : (string, offscreenable_box) Hashtbl.t = Hashtbl.create 16
 
     val mutable is_asteroid : bool = false
 
@@ -135,24 +151,17 @@ class box_collection (b : bool) =
 
     method length = Hashtbl.length table
 
-    method replace (id : string) (e : box) : unit = Hashtbl.replace table id e
+    method replace (id : string) (e : offscreenable_box) : unit = Hashtbl.replace table id e
 
     method remove (id : string) : unit = Hashtbl.remove table id
 
-    method table : (string, box) Hashtbl.t = table
+    method table : (string, offscreenable_box) Hashtbl.t = table
 
     method unregister (e : box) =
       if Hashtbl.mem table e#id#get then begin
-        let x, y = (e#pos#get.x, e#pos#get.y) in
+        (* e#pos#set Vector.{ x = -100.; y = -100. }; *)
+        let e = Hashtbl.find table e#id#get in
+        e#is_dead#set true;
         self#remove e#id#get;
-        e#pos#set Vector.{ x = -100.; y = -100. };
-        if is_asteroid then begin
-          let ast_size = float Global.asteroid_size in
-          let y = y +. ast_size in
-          (* ajout des 3 asteroides *)
-          Global.add_asteroid (e#id#get ^ "0") (-0.6) (x -. (1.5 *. ast_size), y);
-          Global.add_asteroid (e#id#get ^ "1") 0. (x, y);
-          Global.add_asteroid (e#id#get ^ "2") 0.3 (x +. (1.5 *. ast_size), y)
-        end
       end
   end

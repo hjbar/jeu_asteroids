@@ -71,10 +71,7 @@ let remove_old_lasers =
         (fun (k, v) ->
           (* Hashtbl.remove Global.lasers_table k; *)
           Box_collection.lasers#remove k;
-          Collision_system.unregister v;
-          Forces_system.unregister (v :> collidable);
-          Draw_system.unregister (v :> drawable);
-          Move_system.unregister (v :> movable);
+          v#is_offscreen#set true;
           Gc.full_major () )
         old
     end

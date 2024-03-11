@@ -10,7 +10,7 @@ let uid =
       !cpt
     end
 
-let create_asteroid x y id speed =
+let rec create_asteroid x y id speed =
   let l = Global.asteroid_size in
   let mass = 10000. in
   let drag = 0. in
@@ -22,6 +22,13 @@ let create_asteroid x y id speed =
 
   let ast = Box.create id x y l l mass drag rebound Asteroid texture in
   ast#velocity#set speed;
+  let f = ast#remove#get in
+  ast#remove#set (fun () -> f ();
+  if ast#is_dead#get then
+    let ast_size = Global.asteroid_size in
+    create_asteroid (x - ast_size) (y+ast_size) (id ^ "_0") Vector.{ x = -0.6; y = 0.2 +. 0.6 };
+    create_asteroid (x) (y + ast_size) (id ^ "_1") Vector.{ x = 0.0; y = 0.2 };
+    create_asteroid (x + (ast_size)) (y+ ast_size) (id ^ "_1") Vector.{ x = 0.6; y = 0.2 +. 0.6 });
   Box_collection.asteroids#replace id ast
 
 (* Les différents paterns des asteroids *)
@@ -82,7 +89,7 @@ let remove_old_asteroids =
      sinon ils sont hors écrans et on les vire *)
   fun () ->
     begin
-      add_new_asteroids ();
+      (* add_new_asteroids (); *)
       let cpt = ref Box_collection.asteroids#length in
       (* let cpt = ref (Hashtbl.length Global.asteroids_table) in *)
       let old =
@@ -102,11 +109,7 @@ let remove_old_asteroids =
         (fun (k, v) ->
           (* Hashtbl.remove Global.asteroids_table k; *)
           Box_collection.asteroids#remove k;
-          Collision_system.unregister v;
-          Forces_system.unregister (v :> collidable);
-          Draw_system.unregister (v :> drawable);
-          Move_system.unregister (v :> movable);
-          Gc.full_major () )
+          v#is_offscreen#set true)
         old;
       if !cpt < asteroids_required then init_asteroids ()
     end
