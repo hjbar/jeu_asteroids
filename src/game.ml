@@ -1,6 +1,3 @@
-open System_defs
-open Component_defs
-
 (* On crée une fenêtre *)
 let init_window _dt =
   Global.init
@@ -28,7 +25,7 @@ let init dt =
   Random.self_init ();
 
   Wall.init_walls 80;
-  Ovni.init_ovni (Global.width / 2) (Global.height / 2);
+  Init.init_ovni (Global.width / 2) (Global.height / 2);
   Asteroid.init_asteroids ();
 
   Ecs.System.init_all dt;
@@ -58,7 +55,7 @@ let update config dt =
   Ovni.set_sum_forces Vector.{ x = !dx; y = !dy };
 
   (* On update les lasers *)
-  if has_key config.space && Global.allow_to_shoot () then Laser.create ();
+  if has_key config.space && Ovni.allow_to_shoot () then Laser.create ();
 
   (* On update le reste du jeu *)
   Asteroid.remove_old_asteroids ();
@@ -67,7 +64,7 @@ let update config dt =
   Timer.update_all ();
   Ecs.System.update_all dt;
   Print.print ();
-  if Global.alive () then true
+  if Ovni.is_alive () then true
   else (
     Print.game_over ();
     false )

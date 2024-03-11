@@ -1,3 +1,3 @@
 let update_all () =
-  Global.decr_hp_timer ();
-  Global.decr_laser_timer ()
+  Ovni.decr_invincible_timer ();
+  Ovni.decr_laser_timer ()

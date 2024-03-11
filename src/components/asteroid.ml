@@ -10,7 +10,7 @@ let uid =
       !cpt
     end
 
-let create_asteroid x y id speed =
+let create_asteroid x y id =
   let l = Global.asteroid_size in
   let mass = 10000. in
   let drag = 0. in
@@ -21,8 +21,16 @@ let create_asteroid x y id speed =
   let texture = Texture.image_from_surface ctx surface 0 0 32 32 l l in
 
   let ast = Box.create id x y l l mass drag rebound Asteroid texture in
-  ast#velocity#set speed;
-  Box_collection.asteroids#replace id ast
+  Box_collection.asteroids#replace id ast;
+  ast
+
+let create_asteroid_with_velocity x y id speed =
+  let ast = create_asteroid x y id in
+  ast#velocity#set speed
+
+let create_asteroid_with_sumforces x y id speed =
+  let ast = create_asteroid x y id in
+  ast#sum_forces#set speed
 
 (* Les différents paterns des asteroids *)
 let pattern_1 () =
@@ -34,7 +42,7 @@ let pattern_1 () =
   for i = 0 to nb - 1 do
     if i <> rand then begin
       let id = Printf.sprintf "asteroids_%d" (uid ()) in
-      create_asteroid
+      create_asteroid_with_velocity
         (!x + Random.int 5)
         (Random.int 25 - 25 - Global.asteroid_size)
         id speed
@@ -55,7 +63,7 @@ let init_asteroids () =
 let add_new_asteroids () =
   List.iter
     (fun (id, dir, (x, y)) ->
-      create_asteroid (int_of_float x) (int_of_float y) id
+      create_asteroid_with_sumforces (int_of_float x) (int_of_float y) id
         Vector.{ x = dir; y = 0.2 +. Float.abs dir } )
     !Global.asteroids_to_add;
   Global.reset_asteroids_to_add ()

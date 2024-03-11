@@ -81,6 +81,34 @@ class rebound =
     method rebound = rebound
   end
 
+class hp =
+  object
+    val hp = Component.def 0
+
+    method hp = hp
+  end
+
+class invincible =
+  object
+    val invincible = Component.def false
+
+    method invincible = invincible
+  end
+
+class invincible_timer =
+  object
+    val invincible_timer = Component.def 0
+
+    method invincible_timer = invincible_timer
+  end
+
+class laser_timer =
+  object
+    val laser_timer = Component.def 0
+
+    method laser_timer = laser_timer
+  end
+
 (* Some complex components *)
 
 class movable =
@@ -125,6 +153,19 @@ class box =
     inherit id
   end
 
+class ovni =
+  object
+    inherit box
+
+    inherit hp
+
+    inherit invincible
+
+    inherit invincible_timer
+
+    inherit laser_timer
+  end
+
 class box_collection (b : bool) =
   object (self)
     val table : (string, box) Hashtbl.t = Hashtbl.create 16
@@ -140,19 +181,4 @@ class box_collection (b : bool) =
     method remove (id : string) : unit = Hashtbl.remove table id
 
     method table : (string, box) Hashtbl.t = table
-
-    method unregister (e : box) =
-      if Hashtbl.mem table e#id#get then begin
-        let x, y = (e#pos#get.x, e#pos#get.y) in
-        self#remove e#id#get;
-        e#pos#set Vector.{ x = -100.; y = -100. };
-        if is_asteroid then begin
-          let ast_size = float Global.asteroid_size in
-          let y = y +. ast_size in
-          (* ajout des 3 asteroides *)
-          Global.add_asteroid (e#id#get ^ "0") (-0.6) (x -. (1.5 *. ast_size), y);
-          Global.add_asteroid (e#id#get ^ "1") 0. (x, y);
-          Global.add_asteroid (e#id#get ^ "2") 0.3 (x +. (1.5 *. ast_size), y)
-        end
-      end
   end
