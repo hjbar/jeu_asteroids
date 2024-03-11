@@ -143,14 +143,19 @@ class drawable =
 
     inherit texture
   end
-  
-class offscreen = object
+
+class offscreen =
+  object
     val is_offscreen = Component.def false
+
     val is_dead = Component.def false
+
     val remove = Component.def (fun () -> ())
 
     method is_offscreen = is_offscreen
+
     method is_dead = is_dead
+
     method remove = remove
   end
 
@@ -165,8 +170,9 @@ class box =
 
 class offscreenable_box =
   object
-  inherit box
-  inherit offscreen
+    inherit box
+
+    inherit offscreen
   end
 
 class ovni =
@@ -192,7 +198,8 @@ class box_collection (b : bool) =
 
     method length = Hashtbl.length table
 
-    method replace (id : string) (e : offscreenable_box) : unit = Hashtbl.replace table id e
+    method replace (id : string) (e : offscreenable_box) : unit =
+      Hashtbl.replace table id e
 
     method remove (id : string) : unit = Hashtbl.remove table id
 
@@ -203,6 +210,6 @@ class box_collection (b : bool) =
         (* e#pos#set Vector.{ x = -100.; y = -100. }; *)
         let e = Hashtbl.find table e#id#get in
         e#is_dead#set true;
-        self#remove e#id#get;
+        self#remove e#id#get
       end
   end

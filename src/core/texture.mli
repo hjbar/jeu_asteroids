@@ -16,5 +16,13 @@ val image_from_surface :
 val anim_from_surface :
   Gfx.context -> Gfx.surface -> int -> int -> int -> int -> int -> int -> t
 
+type kind_texture =
+  | Ovni
+  | Asteroid
+  | Laser
+
+val get : kind_texture -> Gfx.surface Gfx.resource
+
 val load_all : float -> bool
+
 val wait_all : float -> bool

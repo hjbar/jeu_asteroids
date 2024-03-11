@@ -24,7 +24,7 @@ let create () =
   let rebound = 0. in
 
   let ctx = Gfx.get_context (Global.window ()) in
-  let surface = Gfx.get_resource (Global.get_texture Laser) in
+  let surface = Gfx.get_resource (Texture.get Laser) in
   let texture =
     Texture.anim_from_surface ctx surface 3 3 32 laser_larg laser_long 5
   in

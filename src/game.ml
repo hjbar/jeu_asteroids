@@ -22,13 +22,7 @@ let has_key, set_key, unset_key =
 
 (* On initialise le jeu *)
 let init dt =
-  Random.self_init ();
-
-  Wall.init_walls 80;
-  Init.init_ovni (Global.width / 2) (Global.height / 2);
-  Asteroid.init_asteroids ();
-
-  Ecs.System.init_all dt;
+  Init.init_all dt;
   false
 
 (* On update le jeu *)
@@ -60,7 +54,7 @@ let update config dt =
   (* On update le reste du jeu *)
   Asteroid.remove_old_asteroids ();
   Laser.remove_old_lasers ();
-  Scoring.update_scoring ();
+  Scoring.update ();
   Timer.update_all ();
   Ecs.System.update_all dt;
   Print.print ();

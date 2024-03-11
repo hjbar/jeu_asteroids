@@ -12,7 +12,7 @@ let print () =
   (* score *)
   let s =
     Gfx.render_text ctx
-      (Printf.sprintf "Score : %.2f" (Global.scoring ()))
+      (Printf.sprintf "Score : %.2f" (Scoring.get ()))
       Global.font
   in
   Gfx.blit ctx (Gfx.get_surface (Global.window ())) s 10 35;
@@ -20,7 +20,7 @@ let print () =
   (* wave count *)
   let s =
     Gfx.render_text ctx
-      (Printf.sprintf "Vague numéro : %d" (Global.get_wave ()))
+      (Printf.sprintf "Vague numéro : %d" (Scoring.get_wave ()))
       Global.font
   in
   Gfx.blit ctx (Gfx.get_surface (Global.window ())) s 10 60

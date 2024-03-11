@@ -7,7 +7,6 @@
   (pps js_of_ocaml-ppx))
  (libraries game js_of_ocaml gfx_jsoo))
 
-
 (executable
  (name game_sdl)
  (modes native)

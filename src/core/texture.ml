@@ -27,16 +27,29 @@ let anim_from_surface ctx surface n w h dw dh frame_duration =
   Animation
     { frames; frame_duration; current_time = frame_duration; current_frame = 0 }
 
-(* Fonctions pour load les textures *)
+(* Stuff pour créer les textures *)
+type kind_texture =
+  | Ovni
+  | Asteroid
+  | Laser
 
+let textures = Hashtbl.create 16
+
+let get kind_texture = Hashtbl.find textures kind_texture
+
+(* Fonctions pour load les textures *)
 let load_all _dt =
   let ctx = Gfx.get_context (Global.window ()) in
 
-  Global.set_texture Ovni (Gfx.load_image ctx "resources/anims/fusee.png");
-  Global.set_texture Laser (Gfx.load_image ctx "resources/anims/laser.png");
-  Global.set_texture Asteroid
+  Hashtbl.replace textures Ovni (Gfx.load_image ctx "resources/anims/fusee.png");
+  Hashtbl.replace textures Laser
+    (Gfx.load_image ctx "resources/anims/laser.png");
+  Hashtbl.replace textures Asteroid
     (Gfx.load_image ctx "resources/images/asteroid.png");
 
   false
 
-let wait_all _dt = Global.textures_are_ready ()
+let wait_all _dt =
+  Hashtbl.fold
+    (fun _key value acc -> acc || not (Gfx.resource_ready value))
+    textures false
