@@ -1,6 +1,7 @@
 open System_defs
 open Component_defs
 
+(* Générateur d'uid *)
 let uid =
   let cpt = ref (-1) in
   fun () ->
@@ -10,6 +11,7 @@ let uid =
       !cpt
     end
 
+(* Création d'asteroid *)
 let rec create_asteroid x y id level =
   let l = Global.asteroid_size in
   let l =
@@ -68,7 +70,6 @@ let pattern_1 () =
         (!x + Random.int 5)
         (Random.int 25 - 25 - Global.asteroid_size)
         id speed 2
-      (* Hashtbl.replace Global.asteroids_table id ast *)
     end;
     x := !x + space
   done

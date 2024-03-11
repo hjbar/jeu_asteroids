@@ -1,5 +1,3 @@
-let scoring = ref 0.
-
 let get, update =
   let scoring = ref 0. in
   ( (fun () -> !scoring)

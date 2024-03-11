@@ -1,10 +1,12 @@
 open Component_defs
 open System_defs
 
+(* Dimensions laser *)
 let laser_long = 10 * 3
 
 let laser_larg = 2 * 3
 
+(* Générateur d'uid *)
 let uid =
   let cpt = ref (-1) in
   fun () ->
@@ -14,6 +16,7 @@ let uid =
       !cpt
     end
 
+(* Création de laser *)
 let create () =
   let uid = uid () in
   let id = Printf.sprintf "laser_%d" uid in
@@ -43,7 +46,6 @@ let create () =
   laser#velocity#set speed;
 
   Box_collection.lasers#replace id laser;
-  (* Hashtbl.replace Global.lasers_table uid laser; *)
   Ovni.reset_laser_timer ()
 
 (* Maj les lasers *)

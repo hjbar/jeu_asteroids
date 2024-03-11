@@ -2,7 +2,6 @@ open Component_defs
 open System_defs
 
 let create id x y w h mass drag rebound obj_type texture =
-  Gfx.debug "create\n%!";
   let box = new offscreenable_box in
 
   box#id#set id;
@@ -15,7 +14,6 @@ let create id x y w h mass drag rebound obj_type texture =
   box#texture#set texture;
 
   box#remove#set (fun () ->
-      Gfx.debug "removing %s\n%!" id;
       Collision_system.unregister (box :> box);
       Forces_system.unregister (box :> collidable);
       Draw_system.unregister (box :> drawable);
