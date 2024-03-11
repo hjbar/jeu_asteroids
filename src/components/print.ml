@@ -4,7 +4,7 @@ let print () =
   Gfx.set_color ctx (Gfx.color 12 89 186 255);
   let s =
     Gfx.render_text ctx
-      (Printf.sprintf "Points de vie : %d" (Global.get_hp ()))
+      (Printf.sprintf "Points de vie : %d" (Ovni.get_hp ()))
       Global.font
   in
   Gfx.blit ctx (Gfx.get_surface (Global.window ())) s 10 10;

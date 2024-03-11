@@ -37,13 +37,13 @@ let is_not_collision_between_ovni_and_wall e1 e2 =
   not b
 
 let is_not_invisible () =
-  let b = Global.is_invisible () in
+  let b = Ovni.is_invincible () in
   not b
 
 let pass e1 e2 =
-  ( (Global.is_invisible () && is_ovni e1 && is_wall e2)
+  ( (Ovni.is_invincible () && is_ovni e1 && is_wall e2)
   || (is_wall e1 && is_ovni e2) )
-  || (not (Global.is_invisible ()))
+  || (not (Ovni.is_invincible ()))
   || is_collision_between_laser_and_asteroid e1 e2
 
 let update dt el =
@@ -81,11 +81,12 @@ let update dt el =
               && not (Vector.is_zero v1 && Vector.is_zero v2)
             then begin
               (* modif hp *)
-              if ovni_is_in_mortal_collision e1 e2 then Global.decr_hp ();
+              if ovni_is_in_mortal_collision e1 e2 then Ovni.decr_hp ();
 
               (* On brise en 4 l'asteroid si possible et on supprime le laser *)
-              if is_collision_between_laser_and_asteroid e1 e2 then
-                if e1#object_type#get = Asteroid then (
+              if is_collision_between_laser_and_asteroid e1 e2 then (
+                if e1#object_type#get = Asteroid then
+                  (*
                   Box_collection.lasers#unregister e2;
                   Box_collection.asteroids#unregister e1)
                 else (
@@ -123,41 +124,41 @@ let update dt el =
                 e1#pos#set pos1;
                 e2#pos#set pos2;
 
-                (* [5] On normalise n (on calcule un vecteur de même direction mais de norme 1) *)
-                let n = Vector.normalize n in
-                (* [6] Vitesse relative entre v2 et v1 *)
-                let v = Vector.sub v1 v2 in
+                  (* [5] On normalise n (on calcule un vecteur de même direction mais de norme 1) *)
+                  let n = Vector.normalize n in
+                  (* [6] Vitesse relative entre v2 et v1 *)
+                  let v = Vector.sub v1 v2 in
 
-                (* Préparation au calcul de l'impulsion *)
-                (* Elasticité fixe. En pratique, l'elasticité peut être stockée dans
-                   les objets comme un composant : 1 pour la balle et les murs, 0.5 pour
-                   des obstacles absorbants, 1.2 pour des obstacles rebondissant, … *)
-                let e = max e1#rebound#get e2#rebound#get in
-                (* normalisation des masses *)
-                let m1, m2 =
-                  if Float.is_infinite m1 && Float.is_infinite m2 then
-                    if n_v1 = 0.0 then (m1, 1.0)
-                    else if n_v2 = 0.0 then (1.0, m2)
-                    else (0.0, 0.0)
-                  else (m1, m2)
-                in
-                (* [7] calcul de l'impulsion *)
-                (*
+                  (* Préparation au calcul de l'impulsion *)
+                  (* Elasticité fixe. En pratique, l'elasticité peut être stockée dans
+                     les objets comme un composant : 1 pour la balle et les murs, 0.5 pour
+                     des obstacles absorbants, 1.2 pour des obstacles rebondissant, … *)
+                  let e = max e1#rebound#get e2#rebound#get in
+                  (* normalisation des masses *)
+                  let m1, m2 =
+                    if Float.is_infinite m1 && Float.is_infinite m2 then
+                      if n_v1 = 0.0 then (m1, 1.0)
+                      else if n_v2 = 0.0 then (1.0, m2)
+                      else (0.0, 0.0)
+                    else (m1, m2)
+                  in
+                  (* [7] calcul de l'impulsion *)
+                  (*
               let jbase = -.(1.0 +. e) *. Vector.dot v n in
               let m1divm2 = m1 /. m2 in
               let m2divm1 = m2 /. m1 in
               let j1 = jbase /. (1.0 +. m1divm2) in
               let j2 = jbase /. (1.0 +. m2divm1) in
               *)
-                let j =
-                  -.(1.0 +. e) *. Vector.dot v n /. ((1. /. m1) +. (1. /. m2))
-                in
-                (* [8] calcul des nouvelles vitesses *)
-                let new_v1 = Vector.add v1 (Vector.mult (j /. m1) n) in
-                let new_v2 = Vector.sub v2 (Vector.mult (j /. m2) n) in
-                (* [9] mise à jour des vitesses *)
-                e1#velocity#set new_v1;
-                e2#velocity#set new_v2
+                  let j =
+                    -.(1.0 +. e) *. Vector.dot v n /. ((1. /. m1) +. (1. /. m2))
+                  in
+                  (* [8] calcul des nouvelles vitesses *)
+                  let new_v1 = Vector.add v1 (Vector.mult (j /. m1) n) in
+                  let new_v2 = Vector.sub v2 (Vector.mult (j /. m2) n) in
+                  (* [9] mise à jour des vitesses *)
+                  e1#velocity#set new_v1;
+                  e2#velocity#set new_v2 )
             end
           end )
         el )

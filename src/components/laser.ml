@@ -44,7 +44,7 @@ let create () =
 
   Box_collection.lasers#replace id laser;
   (* Hashtbl.replace Global.lasers_table uid laser; *)
-  Global.reset_laser_timer ()
+  Ovni.reset_laser_timer ()
 
 (* Maj les lasers *)
 let remove_old_lasers =

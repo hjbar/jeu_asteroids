@@ -10,7 +10,7 @@ let uid =
       !cpt
     end
 
-let rec create_asteroid x y id speed =
+let create_asteroid x y id =
   let l = Global.asteroid_size in
   let mass = 10000. in
   let drag = 0. in
@@ -41,7 +41,7 @@ let pattern_1 () =
   for i = 0 to nb - 1 do
     if i <> rand then begin
       let id = Printf.sprintf "asteroids_%d" (uid ()) in
-      create_asteroid
+      create_asteroid_with_velocity
         (!x + Random.int 5)
         (Random.int 25 - 25 - Global.asteroid_size)
         id speed
@@ -62,7 +62,7 @@ let init_asteroids () =
 let add_new_asteroids () =
   List.iter
     (fun (id, dir, (x, y)) ->
-      create_asteroid (int_of_float x) (int_of_float y) id
+      create_asteroid_with_sumforces (int_of_float x) (int_of_float y) id
         Vector.{ x = dir; y = 0.2 +. Float.abs dir } )
     !Global.asteroids_to_add;
   Global.reset_asteroids_to_add ()

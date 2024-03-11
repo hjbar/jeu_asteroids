@@ -81,6 +81,34 @@ class rebound =
     method rebound = rebound
   end
 
+class hp =
+  object
+    val hp = Component.def 0
+
+    method hp = hp
+  end
+
+class invincible =
+  object
+    val invincible = Component.def false
+
+    method invincible = invincible
+  end
+
+class invincible_timer =
+  object
+    val invincible_timer = Component.def 0
+
+    method invincible_timer = invincible_timer
+  end
+
+class laser_timer =
+  object
+    val laser_timer = Component.def 0
+
+    method laser_timer = laser_timer
+  end
+
 (* Some complex components *)
 
 class movable =
@@ -139,6 +167,19 @@ class offscreenable_box =
   object
   inherit box
   inherit offscreen
+  end
+
+class ovni =
+  object
+    inherit box
+
+    inherit hp
+
+    inherit invincible
+
+    inherit invincible_timer
+
+    inherit laser_timer
   end
 
 class box_collection (b : bool) =

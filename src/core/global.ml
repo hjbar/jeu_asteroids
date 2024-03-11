@@ -23,6 +23,7 @@ let big_font = Gfx.load_font "monospace" "" 256
 let wall_l = 80
 
 (* OVNI *)
+
 let ovni_w, ovni_h =
   let factor = 2.5 in
   (int_of_float (19. *. factor), int_of_float (32. *. factor))
@@ -61,28 +62,6 @@ let get_texture, set_texture, textures_are_ready =
       Hashtbl.fold
         (fun _key value acc -> acc || not (Gfx.resource_ready value))
         htbl false )
-
-(* HP *)
-let get_hp, alive, incr_hp, decr_hp, decr_hp_timer, is_invisible =
-  let hp = ref 5 in
-  let timer = ref 0 in
-  ( (fun () -> !hp)
-  , (fun () -> !hp > 0)
-  , (fun () -> incr hp)
-  , (fun () ->
-      if !timer = 0 then begin
-        decr hp;
-        timer := 120
-      end )
-  , (fun () -> if !timer > 0 then decr timer)
-  , fun () -> !timer > 0 )
-
-(* Laser *)
-let allow_to_shoot, reset_laser_timer, decr_laser_timer =
-  let timer = ref 0 in
-  ( (fun () -> !timer = 0)
-  , (fun () -> timer := 20)
-  , fun () -> if !timer > 0 then decr timer )
 
 (* (id, dir, (x, y)) *)
 let asteroids_to_add : (string * float * (float * float)) list ref = ref []

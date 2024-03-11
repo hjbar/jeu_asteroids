@@ -1,37 +1,33 @@
-open Component_defs
-open System_defs
+let ovni () = match !Entities.ovni with Some o -> o | None -> assert false
 
-let ovni = ref (new box)
+let set_sum_forces v = (ovni ())#sum_forces#set v
 
-let create id x y =
-  let ovni = new box in
+let get_x () = (ovni ())#pos#get.x
 
-  ovni#id#set id;
-  ovni#pos#set Vector.{ x = float x; y = float y };
-  ovni#rect#set Rect.{ width = Global.ovni_w; height = Global.ovni_h };
-  ovni#mass#set 100.;
-  ovni#drag#set 0.02;
-  ovni#rebound#set 0.;
-  ovni#object_type#set Ovni;
+let get_y () = (ovni ())#pos#get.y
 
-  (* ovni#texture#set (Texture.color (Gfx.color 255 0 0 255)); *)
-  let ctx = Gfx.get_context (Global.window ()) in
-  let surface = Gfx.get_resource (Global.get_texture Ovni) in
-  ovni#texture#set
-    (Texture.anim_from_surface ctx surface 6 19 32 Global.ovni_w Global.ovni_h
-       10 );
+let get_hp () = (ovni ())#hp#get
 
-  Collision_system.register ovni;
-  Forces_system.register (ovni :> collidable);
-  Draw_system.register (ovni :> drawable);
-  Move_system.register (ovni :> movable);
+let incr_hp () = (ovni ())#hp#set ((ovni ())#hp#get + 1)
 
-  ovni
+let decr_hp () =
+  if (ovni ())#invincible_timer#get = 0 then begin
+    (ovni ())#hp#set ((ovni ())#hp#get - 1);
+    (ovni ())#invincible_timer#set 120
+  end
 
-let init_ovni x y = ovni := create "ovni" x y
+let is_alive () = (ovni ())#hp#get > 0
 
-let set_sum_forces v = !ovni#sum_forces#set v
+let decr_invincible_timer () =
+  let timer = (ovni ())#invincible_timer#get in
+  if timer > 0 then (ovni ())#invincible_timer#set (timer - 1)
 
-let get_x () = !ovni#pos#get.x
+let is_invincible () = (ovni ())#invincible_timer#get > 0
 
-let get_y () = !ovni#pos#get.y
+let allow_to_shoot () = (ovni ())#laser_timer#get = 0
+
+let reset_laser_timer () = (ovni ())#laser_timer#set 20
+
+let decr_laser_timer () =
+  let timer = (ovni ())#laser_timer#get in
+  if timer > 0 then (ovni ())#laser_timer#set (timer - 1)
