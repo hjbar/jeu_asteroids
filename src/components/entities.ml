@@ -1,8 +1,7 @@
-(*
-  On stocke ici les entités que l'on veut stocker durablement dans le temps.
-  Par exemple, les asteroids et les lasers sont temporaires, donc on ne les
-  stocke pas ici.
-  Les murs ne sont pas temporaires mais on n'a pas besoin d'y avoir accès.
-*)
+open Component_defs
 
 let (ovni : Component_defs.ovni option ref) = ref None
+
+let lasers = new box_collection false
+
+let asteroids = new box_collection true

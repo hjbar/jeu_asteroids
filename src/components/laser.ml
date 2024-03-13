@@ -45,7 +45,7 @@ let create () =
   let speed = Vector.{ x = 0.; y = -0.75 } in
   laser#velocity#set speed;
 
-  Box_collection.lasers#replace id laser;
+  Entities.lasers#replace id laser;
   Ovni.reset_laser_timer ()
 
 (* Maj les lasers *)
@@ -67,12 +67,12 @@ let remove_old_lasers =
               Rect.intersect v#pos#get v#rect#get screen#pos#get screen#rect#get
             then init
             else (k, v) :: init )
-          (* Global.lasers_table *) Box_collection.lasers#table []
+          (* Global.lasers_table *) Entities.lasers#table []
       in
       List.iter
         (fun (k, v) ->
           (* Hashtbl.remove Global.lasers_table k; *)
-          Box_collection.lasers#remove k;
+          Entities.lasers#remove k;
           v#is_offscreen#set true;
           Gc.full_major () )
         old

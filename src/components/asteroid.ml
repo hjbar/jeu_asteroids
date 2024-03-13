@@ -64,7 +64,7 @@ let rec create_asteroid x y id level =
             Vector.{ x = vx; y = vy }
             lvl
         end );
-  Box_collection.asteroids#replace id ast;
+  Entities.asteroids#replace id ast;
   ast
 
 and create_asteroid_with_velocity x y id velocity level =
@@ -124,7 +124,7 @@ let remove_old_asteroids =
   fun () ->
     begin
       (* add_new_asteroids (); *)
-      let cpt = ref Box_collection.asteroids#length in
+      let cpt = ref Entities.asteroids#length in
       (* let cpt = ref (Hashtbl.length Global.asteroids_table) in *)
       let old =
         Hashtbl.fold
@@ -137,12 +137,12 @@ let remove_old_asteroids =
               Rect.intersect v#pos#get v#rect#get screen#pos#get screen#rect#get
             then init
             else (k, v) :: init )
-          (* Global.asteroids_table *) Box_collection.asteroids#table []
+          (* Global.asteroids_table *) Entities.asteroids#table []
       in
       List.iter
         (fun (k, v) ->
           (* Hashtbl.remove Global.asteroids_table k; *)
-          Box_collection.asteroids#remove k;
+          Entities.asteroids#remove k;
           v#is_offscreen#set true )
         old;
       if !cpt < asteroids_required then init_asteroids ()

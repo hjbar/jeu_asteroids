@@ -90,11 +90,11 @@ let update dt el =
                 is_collision_between_laser_and_asteroid e1 e2 && not !unregister
               then begin
                 if e1#object_type#get = Asteroid then (
-                  Box_collection.lasers#unregister e2;
-                  Box_collection.asteroids#unregister e1 )
+                  Entities.lasers#unregister e2;
+                  Entities.asteroids#unregister e1 )
                 else (
-                  Box_collection.lasers#unregister e1;
-                  Box_collection.asteroids#unregister e2 );
+                  Entities.lasers#unregister e1;
+                  Entities.asteroids#unregister e2 );
                 unregister := true
               end
               else

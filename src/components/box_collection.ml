@@ -1,5 +1,0 @@
-open Component_defs
-
-let lasers = new box_collection false
-
-let asteroids = new box_collection true
