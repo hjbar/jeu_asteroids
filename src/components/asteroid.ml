@@ -34,7 +34,8 @@ let rec create_asteroid x y id level =
 
   ast#remove#set (fun () ->
       f ();
-      if ast#is_dead#get then
+      let lvl = ast#level#get - 1 in
+      if ast#is_dead#get && lvl >= 0 then
         let ast_size = Global.asteroid_size in
 
         let x = int_of_float ast#pos#get.x in
