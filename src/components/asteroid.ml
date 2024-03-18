@@ -81,7 +81,9 @@ let pattern_1 () =
   let space = (Global.ovni_w / 2) + 10 + Global.asteroid_size in
   let nb = Global.width / space in
   let rand = Random.int nb in
-  let speed = Vector.{ x = 0.; y = 3.75 } in
+  let speed =
+    Vector.{ x = 0.; y = 3.75 +. (0.4 *. float (Scoring.get_wave ())) }
+  in
   let x = ref ((10 + Global.asteroid_size) / 2) in
   for i = 0 to nb - 1 do
     if i <> rand then begin
@@ -94,10 +96,58 @@ let pattern_1 () =
     x := !x + space
   done
 
-let paterns = [| pattern_1 |]
+let pattern_3 () =
+  let space = (Global.ovni_w / 2) + 10 + Global.asteroid_size in
+  let nb = Global.width / space in
+  let rand = Random.int 2 in
+  let x = ref ((10 + Global.asteroid_size) / 2) in
+  for i = 0 to nb - 1 do
+    let id = Printf.sprintf "asteroids_%d" (uid ()) in
+    create_asteroid_with_sumforces
+      (!x + Random.int 5)
+      (Random.int 25 - 25 - Global.asteroid_size)
+      id
+      Vector.
+        { x = 0.
+        ; y =
+            (if i mod 2 = rand then 3.75 else 7.5)
+            +. (0.4 *. float (Scoring.get_wave ()))
+            +. Random.float 2.0
+        }
+      2;
+    x := !x + space
+  done
+
+let pattern_4 () =
+  let space = (Global.ovni_w / 2) + 10 + Global.asteroid_size in
+  let width = (5 * space) + 10 in
+  let x = ref (Random.int ((Global.width / 2) - width)) in
+  for v = 0 to 1 do
+    for i = 0 to 4 do
+      let id = Printf.sprintf "asteroids_%d" (uid ()) in
+      create_asteroid_with_sumforces
+        (!x + (i * space))
+        (-space * 4) id
+        Vector.{ x = 0.; y = 3.75 +. (0.4 *. float (Scoring.get_wave ())) }
+        2
+    done;
+    x := !x + (2 * space);
+    for i = 0 to 2 do
+      let id = Printf.sprintf "asteroids_%d" (uid ()) in
+      create_asteroid_with_sumforces !x
+        ((-space * 4) + ((i + 1) * space))
+        id
+        Vector.{ x = 0.; y = 3.75 +. (0.4 *. float (Scoring.get_wave ())) }
+        2
+    done;
+    x := Random.int ((Global.width / 2) - width) + (Global.width / 2)
+  done
+
+let paterns = [| pattern_3 |]
 
 (* Lance l'init des asteroids *)
 let init_asteroids () =
+  Global.set_gravity (Global.gravity () *. 1.1);
   Scoring.incr_wave ();
   let rand = Random.int (Array.length paterns) in
   paterns.(rand) ()
@@ -105,9 +155,9 @@ let init_asteroids () =
 (* Maj les asteorids *)
 let remove_old_asteroids =
   let screen =
-    Box.invisible "screen" (-Global.wall_l) (-Global.wall_l)
+    Box.invisible "screen" (-Global.wall_l) (-Global.height)
       (Global.width + (2 * Global.wall_l))
-      (Global.height + (2 * Global.wall_l))
+      ((2 * Global.height) + (2 * Global.wall_l))
   in
 
   let bot_mid_screen =
@@ -116,10 +166,7 @@ let remove_old_asteroids =
       Global.width (Global.height / 2)
   in
 
-  let asteroids_required =
-    (Global.width / Global.asteroid_size)
-    - (Global.width / Global.asteroid_size / 2)
-  in
+  let asteroids_required = 1 in
   (* si collision avec zone d'affichage, alors ils sont encore visibles donc on les garde
      sinon ils sont hors écrans et on les vire *)
   fun () ->

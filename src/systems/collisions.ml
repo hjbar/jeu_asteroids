@@ -34,19 +34,24 @@ let is_not_collision_between_laser_and_wall e1 e2 =
   let b = (is_laser e1 && is_wall e2) || (is_wall e1 && is_laser e2) in
   not b
 
-let is_not_collision_between_ovni_and_wall e1 e2 =
-  let b = (is_ovni e1 && is_wall e2) || (is_wall e1 && is_ovni e2) in
+let is_not_collision_between_asteroid_and_ovni e1 e2 =
+  let b = (is_ovni e1 && is_asteroid e2) || (is_asteroid e1 && is_ovni e2) in
   not b
 
-let is_not_invisible () =
-  let b = Ovni.is_invincible () in
+let is_not_collision_between_laser_and_ovni e1 e2 =
+  let b = (is_ovni e1 && is_laser e2) || (is_laser e1 && is_ovni e2) in
   not b
 
 let pass e1 e2 =
-  ( (Ovni.is_invincible () && is_ovni e1 && is_wall e2)
-  || (is_wall e1 && is_ovni e2) )
-  || (not (Ovni.is_invincible ()))
-  || is_collision_between_laser_and_asteroid e1 e2
+  let b =
+    is_not_collision_between_asteroid_and_wall e1 e2
+    && is_not_collision_between_laser_and_wall e1 e2
+  in
+  if Ovni.is_invincible () then
+    b
+    && is_not_collision_between_asteroid_and_ovni e1 e2
+    && is_not_collision_between_laser_and_ovni e1 e2
+  else b
 
 let update dt el =
   Seq.iteri
@@ -63,12 +68,7 @@ let update dt el =
              les objets : si on compare A et B, on ne compare pas B et A.
              Il faudra améliorer cela si on a beaucoup (> 30) objets simultanément.
           *)
-          if
-            j > i
-            && (Float.is_finite m1 || Float.is_finite m2)
-            && is_not_collision_between_asteroid_and_wall e1 e2
-            && is_not_collision_between_laser_and_wall e1 e2
-            && pass e1 e2
+          if j > i && (Float.is_finite m1 || Float.is_finite m2) && pass e1 e2
           then begin
             (* les composants du rectangle r2 *)
             let pos2 = e2#pos#get in
@@ -170,7 +170,7 @@ let update dt el =
     el
 
 let update dt el =
-  for i = 0 to 3 do
+  for i = 0 to 4 do
     update dt el
   done;
   unregister := false
