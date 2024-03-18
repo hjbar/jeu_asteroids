@@ -19,7 +19,7 @@ let rec create_asteroid x y id level =
   in
   let mass = [| 10.; 100.; 1000. |].(level) in
   let drag = 0. in
-  let rebound = 0.5 in
+  let rebound = 0.95 in
 
   let ctx = Gfx.get_context (Global.window ()) in
   let surface = Gfx.get_resource (Texture.get Asteroid) in
@@ -96,6 +96,41 @@ let pattern_1 () =
     x := !x + space
   done
 
+let pattern_2 () =
+  let decal () = (float (Random.int 50) -. 25.) /. 100. in
+  let space = 2 * Global.asteroid_size in
+  let nb = Global.width / space in
+
+  let factor = 8. in
+
+  let x1 = ref (-Global.width / 2) in
+  let y1 = ref (-Global.height / 4) in
+
+  let x2 = ref (Global.width + (Global.width / 8)) in
+  let y2 = ref (-Global.height / 2) in
+
+  for _ = 1 to nb do
+    let id1 = Printf.sprintf "asteroids_%d" (uid ()) in
+    let speed1 =
+      Vector.mult
+        (factor +. decal ())
+        (Vector.normalize Vector.{ x = 1.; y = 1. })
+    in
+    create_asteroid_with_sumforces !x1 !y1 id1 speed1 2;
+
+    let id2 = Printf.sprintf "asteroids_%d" (uid ()) in
+    let speed2 =
+      Vector.mult
+        (factor +. decal ())
+        (Vector.normalize Vector.{ x = -3.; y = 1. })
+    in
+    create_asteroid_with_sumforces !x2 !y2 id2 speed2 2;
+
+    x1 := !x1 + space;
+    x2 := !x2 + space;
+    y2 := !y2 + space
+  done
+
 let pattern_3 () =
   let space = (Global.ovni_w / 2) + 10 + Global.asteroid_size in
   let nb = Global.width / space in
@@ -155,9 +190,8 @@ let init_asteroids () =
 (* Maj les asteorids *)
 let remove_old_asteroids =
   let screen =
-    Box.invisible "screen" (-Global.wall_l) (-Global.height)
-      (Global.width + (2 * Global.wall_l))
-      ((2 * Global.height) + (2 * Global.wall_l))
+    Box.invisible "screen" (-Global.width) (-Global.height) (3 * Global.width)
+      (2 * Global.height)
   in
 
   let bot_mid_screen =
@@ -166,14 +200,17 @@ let remove_old_asteroids =
       Global.width (Global.height / 2)
   in
 
+  let _asteroids_required =
+    (Global.width / Global.asteroid_size)
+    - (Global.width / Global.asteroid_size / 2)
+  in
   let asteroids_required = 1 in
+
   (* si collision avec zone d'affichage, alors ils sont encore visibles donc on les garde
      sinon ils sont hors écrans et on les vire *)
   fun () ->
     begin
-      (* add_new_asteroids (); *)
       let cpt = ref Entities.asteroids#length in
-      (* let cpt = ref (Hashtbl.length Global.asteroids_table) in *)
       let old =
         Hashtbl.fold
           (fun k v init ->
@@ -185,11 +222,10 @@ let remove_old_asteroids =
               Rect.intersect v#pos#get v#rect#get screen#pos#get screen#rect#get
             then init
             else (k, v) :: init )
-          (* Global.asteroids_table *) Entities.asteroids#table []
+          Entities.asteroids#table []
       in
       List.iter
         (fun (k, v) ->
-          (* Hashtbl.remove Global.asteroids_table k; *)
           Entities.asteroids#remove k;
           v#is_offscreen#set true )
         old;

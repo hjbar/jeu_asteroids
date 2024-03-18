@@ -50,11 +50,7 @@ let create () =
 
 (* Maj les lasers *)
 let remove_old_lasers =
-  let screen =
-    Box.invisible "screen" (-Global.wall_l) (-Global.wall_l)
-      (Global.width + (2 * Global.wall_l))
-      (Global.height + (2 * Global.wall_l))
-  in
+  let screen = Box.invisible "screen" 0 0 Global.width Global.height in
 
   (* si collision avec zone d'affichage, alors ils sont encore visibles donc on les garde
       sinon ils sont hors écrans et on les vire *)
