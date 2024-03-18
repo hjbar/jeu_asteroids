@@ -101,7 +101,7 @@ let pattern_2 () =
   let space = 2 * Global.asteroid_size in
   let nb = Global.width / space in
 
-  let factor = 8. in
+  let factor = 8. +. (0.4 *. float (Scoring.get_wave ())) in
 
   let x1 = ref (-Global.width / 2) in
   let y1 = ref (-Global.height / 4) in
@@ -178,7 +178,7 @@ let pattern_4 () =
     x := Random.int ((Global.width / 2) - width) + (Global.width / 2)
   done
 
-let paterns = [| pattern_3 |]
+let paterns = [| pattern_1; pattern_2; pattern_3; pattern_4 |]
 
 (* Lance l'init des asteroids *)
 let init_asteroids () =
