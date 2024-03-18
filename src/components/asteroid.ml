@@ -95,16 +95,11 @@ let pattern_1 () =
   done
 
 let pattern_2 () =
+  let decal () = (float (Random.int 50) -. 25.) /. 100. in
   let space = 2 * Global.asteroid_size in
   let nb = Global.width / space in
 
   let factor = 8. in
-  let speed1 =
-    Vector.mult factor (Vector.normalize Vector.{ x = 1.; y = 1. })
-  in
-  let speed2 =
-    Vector.mult factor (Vector.normalize Vector.{ x = -3.; y = 1. })
-  in
 
   let x1 = ref (-Global.width / 2) in
   let y1 = ref (-Global.height / 4) in
@@ -114,9 +109,19 @@ let pattern_2 () =
 
   for _ = 1 to nb do
     let id1 = Printf.sprintf "asteroids_%d" (uid ()) in
+    let speed1 =
+      Vector.mult
+        (factor +. decal ())
+        (Vector.normalize Vector.{ x = 1.; y = 1. })
+    in
     create_asteroid_with_sumforces !x1 !y1 id1 speed1 2;
 
     let id2 = Printf.sprintf "asteroids_%d" (uid ()) in
+    let speed2 =
+      Vector.mult
+        (factor +. decal ())
+        (Vector.normalize Vector.{ x = -3.; y = 1. })
+    in
     create_asteroid_with_sumforces !x2 !y2 id2 speed2 2;
 
     x1 := !x1 + space;
