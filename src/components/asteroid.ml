@@ -190,8 +190,8 @@ let init_asteroids () =
 (* Maj les asteorids *)
 let remove_old_asteroids =
   let screen =
-    Box.invisible "screen" (-Global.width) (-Global.height) (3 * Global.width)
-      (2 * Global.height)
+    Box.invisible "screen" (-Global.width / 2) (-Global.height)
+      (2 * Global.width) (2 * Global.height)
   in
 
   let bot_mid_screen =
@@ -204,7 +204,7 @@ let remove_old_asteroids =
     (Global.width / Global.asteroid_size)
     - (Global.width / Global.asteroid_size / 2)
   in
-  let asteroids_required = 1 in
+  let asteroids_required = min (max 1 (int_of_float (Global.gravity ()))) 32 in
 
   (* si collision avec zone d'affichage, alors ils sont encore visibles donc on les garde
      sinon ils sont hors écrans et on les vire *)
