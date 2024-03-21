@@ -189,27 +189,25 @@ let init_asteroids () =
 
 (* Maj les asteorids *)
 let remove_old_asteroids =
-  let screen =
-    Box.invisible "screen" (-Global.width / 2) (-Global.height)
+  let valid_pos =
+    Box.invisible "valid_pos" (-Global.width / 2) (-Global.height)
       (2 * Global.width) (2 * Global.height)
   in
 
   let bot_mid_screen =
     Box.invisible "bot_mid_screen" 0
       (3 * Global.height / 4)
-      Global.width (Global.height / 2)
+      Global.width (Global.height / 4)
   in
-
-  let _asteroids_required =
-    (Global.width / Global.asteroid_size)
-    - (Global.width / Global.asteroid_size / 2)
-  in
-  let asteroids_required = min (max 1 (int_of_float (Global.gravity ()))) 32 in
 
   (* si collision avec zone d'affichage, alors ils sont encore visibles donc on les garde
      sinon ils sont hors écrans et on les vire *)
   fun () ->
     begin
+      let asteroids_required =
+        min (max 1 (int_of_float (Global.gravity ()))) 32
+      in
+
       let cpt = ref Entities.asteroids#length in
       let old =
         Hashtbl.fold
@@ -218,8 +216,10 @@ let remove_old_asteroids =
               Rect.intersect v#pos#get v#rect#get bot_mid_screen#pos#get
                 bot_mid_screen#rect#get
             then decr cpt;
+
             if
-              Rect.intersect v#pos#get v#rect#get screen#pos#get screen#rect#get
+              Rect.intersect v#pos#get v#rect#get valid_pos#pos#get
+                valid_pos#rect#get
             then init
             else (k, v) :: init )
           Entities.asteroids#table []
