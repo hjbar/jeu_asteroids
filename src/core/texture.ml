@@ -31,6 +31,11 @@ let anim_from_surface ctx surface n w h dw dh frame_duration =
 type kind_texture =
   | Ovni
   | Asteroid
+  | Asteroid_common
+  | Asteroid_uncommon
+  | Asteroid_rare
+  | Asteroid_epic
+  | Asteroid_legendary
   | Laser
 
 let textures = Hashtbl.create 16
@@ -42,10 +47,22 @@ let load_all _dt =
   let ctx = Gfx.get_context (Global.window ()) in
 
   Hashtbl.replace textures Ovni (Gfx.load_image ctx "resources/anims/fusee.png");
-  Hashtbl.replace textures Laser
-    (Gfx.load_image ctx "resources/anims/laser.png");
+
   Hashtbl.replace textures Asteroid
     (Gfx.load_image ctx "resources/images/asteroid.png");
+  Hashtbl.replace textures Asteroid_common
+    (Gfx.load_image ctx "resources/images/asteroid_common.png");
+  Hashtbl.replace textures Asteroid_uncommon
+    (Gfx.load_image ctx "resources/images/asteroid_uncommon.png");
+  Hashtbl.replace textures Asteroid_rare
+    (Gfx.load_image ctx "resources/images/asteroid_rare.png");
+  Hashtbl.replace textures Asteroid_epic
+    (Gfx.load_image ctx "resources/images/asteroid_epic.png");
+  Hashtbl.replace textures Asteroid_legendary
+    (Gfx.load_image ctx "resources/images/asteroid_legendary.png");
+
+  Hashtbl.replace textures Laser
+    (Gfx.load_image ctx "resources/anims/laser.png");
 
   false
 

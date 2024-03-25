@@ -21,8 +21,13 @@ let rec create_asteroid x y id level =
   let drag = 0. in
   let rebound = 0.95 in
 
+  let is_bonus = Random.int 100 < 5 in
+  let f_bonus, kind_texture =
+    if is_bonus then Bonus.get_bonus () else ((fun () -> ()), Asteroid)
+  in
+
   let ctx = Gfx.get_context (Global.window ()) in
-  let surface = Gfx.get_resource (Texture.get Asteroid) in
+  let surface = Gfx.get_resource (Texture.get kind_texture) in
   let texture = Texture.image_from_surface ctx surface 0 0 32 32 l l in
 
   let ast = Box.create id x y l l mass drag rebound Asteroid texture in
@@ -34,6 +39,7 @@ let rec create_asteroid x y id level =
 
   ast#remove#set (fun () ->
       f ();
+      f_bonus ();
       let lvl = ast#level#get - 1 in
       if ast#is_dead#get && lvl >= 0 then
         let ast_size = Global.asteroid_size in
