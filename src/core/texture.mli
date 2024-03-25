@@ -19,6 +19,11 @@ val anim_from_surface :
 type kind_texture =
   | Ovni
   | Asteroid
+  | Asteroid_common
+  | Asteroid_uncommon
+  | Asteroid_rare
+  | Asteroid_epic
+  | Asteroid_legendary
   | Laser
 
 val get : kind_texture -> Gfx.surface Gfx.resource
