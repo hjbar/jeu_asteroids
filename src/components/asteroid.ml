@@ -50,11 +50,11 @@ let rec create_asteroid x y id level =
         if lvl >= 0 then begin
           create_asteroid_with_sumforces (x - ast_size) (y - ast_size)
             (id ^ "_0")
-            Vector.{ x = -1. *. vx; y = -1. *. vy }
+            Vector.{ x = -1. *. vx; y = -0.75 *. vy }
             lvl;
           create_asteroid_with_sumforces (x + ast_size) (y - ast_size)
             (id ^ "_1")
-            Vector.{ x = vx; y = -1. *. vy }
+            Vector.{ x = vx; y = -0.75 *. vy }
             lvl;
           create_asteroid_with_sumforces (x - ast_size) (y + ast_size)
             (id ^ "_2")

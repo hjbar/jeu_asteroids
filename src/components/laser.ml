@@ -6,6 +6,8 @@ let laser_long = 10 * 3
 
 let laser_larg = 2 * 3
 
+let nb_lasers = ref 1
+
 (* Générateur d'uid *)
 let uid =
   let cpt = ref (-1) in
@@ -19,7 +21,6 @@ let uid =
 (* Création de laser *)
 let create () =
   let uid = uid () in
-  let id = Printf.sprintf "laser_%d" uid in
   let x = 0 in
   let y = 0 in
   let mass = 1. in
@@ -32,20 +33,31 @@ let create () =
     Texture.anim_from_surface ctx surface 3 3 32 laser_larg laser_long 5
   in
 
-  let laser =
-    Box.create id x y laser_larg laser_long mass drag rebound Laser texture
-  in
+  let lasers = Array.init !nb_lasers (fun i -> let id = Printf.sprintf "laser_%d_%d" uid i in Box.create id x y laser_larg laser_long mass drag rebound Laser texture) in
 
   let dif_x = float (Global.ovni_w / 2) -. float (laser_larg / 2) in
   let dif_y = -.float laser_long in
   let x = Ovni.get_x () +. dif_x in
   let y = Ovni.get_y () +. dif_y in
-  laser#pos#set Vector.{ x; y };
+  
+  let d = !nb_lasers / 2 in
+  if !nb_lasers mod 2 = 0 then
+    for i = 0 to d - 1 do
+      lasers.(i)#pos#set Vector.{ x = x +. 5. -. 10. *. (float (i+1)); y };
+      lasers.(d + i)#pos#set Vector.{ x = x -. 5.0 +. 10. *. (float (i+1)); y };
+    done
+  else
+    begin
+      for i = 0 to d - 1 do
+        lasers.(i)#pos#set Vector.{ x = x -. 10. *. (float (i+1)); y };
+        lasers.(d + i + 1)#pos#set Vector.{ x = x +. 10. *.  (float (i+1)); y };
+      done;
+      lasers.(d)#pos#set Vector.{ x ; y }
+    end;
 
   let speed = Vector.{ x = 0.; y = -0.75 } in
-  laser#velocity#set speed;
+  Array.iter (fun v -> v#velocity#set speed; Entities.lasers#replace v#id#get v) lasers;
 
-  Entities.lasers#replace id laser;
   Ovni.reset_laser_timer ()
 
 (* Maj les lasers *)

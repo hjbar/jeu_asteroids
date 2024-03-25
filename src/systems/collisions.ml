@@ -4,7 +4,7 @@ type t = box
 
 let init _ = ()
 
-let unregister = ref false
+let unregistered_lasers = ref []
 
 let is_wall e =
   match e#object_type#get with Wall | Wall_bot -> true | _ -> false
@@ -41,7 +41,7 @@ let is_not_collision_between_asteroid_and_ovni e1 e2 =
 let is_not_collision_between_laser_and_ovni e1 e2 =
   let b = (is_ovni e1 && is_laser e2) || (is_laser e1 && is_ovni e2) in
   not b
-
+  
 let pass e1 e2 =
   let b =
     is_not_collision_between_asteroid_and_wall e1 e2
@@ -86,15 +86,21 @@ let update dt el =
           if ovni_is_in_mortal_collision e1 e2 then Ovni.decr_hp ();
 
           (* On brise en 4 l'asteroid si possible et on supprime le laser *)
-          if is_collision_between_laser_and_asteroid e1 e2 && not !unregister
+          if is_collision_between_laser_and_asteroid e1 e2
           then begin
             if e1#object_type#get = Asteroid then (
-              Entities.lasers#unregister e2;
-              Entities.asteroids#unregister e1 )
+              if not (List.mem e2#id#get !unregistered_lasers) then (
+                Entities.lasers#unregister e2;
+                Entities.asteroids#unregister e1;
+                unregistered_lasers := e2#id#get :: !unregistered_lasers
+                )
+              )
             else (
-              Entities.lasers#unregister e1;
-              Entities.asteroids#unregister e2 );
-            unregister := true
+              if not (List.mem e1#id#get !unregistered_lasers) then (
+                Entities.lasers#unregister e1;
+                Entities.asteroids#unregister e2;
+                unregistered_lasers := e1#id#get :: !unregistered_lasers)
+              );
           end
           else
             (* [3] le plus petit des vecteurs a b c d *)
@@ -171,4 +177,4 @@ let update dt el =
   for i = 0 to 3 do
     update dt tab_el
   done;
-  unregister := false
+  unregistered_lasers := []

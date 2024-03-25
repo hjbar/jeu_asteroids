@@ -26,7 +26,9 @@ let is_invincible () = (ovni ())#invincible_timer#get > 0
 
 let allow_to_shoot () = (ovni ())#laser_timer#get = 0
 
-let reset_laser_timer () = (ovni ())#laser_timer#set 20
+let delay = ref 20
+
+let reset_laser_timer () = (ovni ())#laser_timer#set !delay
 
 let decr_laser_timer () =
   let timer = (ovni ())#laser_timer#get in
