@@ -18,6 +18,8 @@ val is_invincible : unit -> bool
 
 val allow_to_shoot : unit -> bool
 
+val delay : int ref
+
 val reset_laser_timer : unit -> unit
 
 val decr_laser_timer : unit -> unit

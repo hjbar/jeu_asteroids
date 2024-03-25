@@ -1,15 +1,31 @@
+(* common_bonus *)
+
 let common_bonus = [| (fun () -> ()) |]
+
+(* uncommon_bonus *)
 
 let uncommon_bonus = [| (fun () -> ()) |]
 
+(* rare_bonus *)
+
 let rare_bonus = [| (fun () -> ()) |]
+
+(* epic_bonus *)
 
 let epic_bonus = [| (fun () -> ()) |]
 
-let legendary_bonus = [| (fun () -> ()) |]
+(* legendary_bonus *)
+
+let increase_nb_lasers () = Laser.nb_lasers := min 8 (!Laser.nb_lasers + 1)
+
+let increase_shoot_speed () = Ovni.delay := max 5 (!Ovni.delay - 3)
+
+let legendary_bonus = [| increase_nb_lasers; increase_shoot_speed |]
+
+(* get_bonus *)
 
 let get_bonus () =
-  let nb = Random.int 100 in
+  let nb = Random.int 5 in
 
   let bonus, texture =
     if nb < 5 then
