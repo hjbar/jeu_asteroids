@@ -25,7 +25,7 @@ let legendary_bonus = [| increase_nb_lasers; increase_shoot_speed |]
 (* get_bonus *)
 
 let get_bonus () =
-  let nb = Random.int 5 in
+  let nb = Random.int 100 in
 
   let bonus, texture =
     if nb < 5 then
