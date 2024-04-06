@@ -1,26 +1,72 @@
+(* Some types *)
+
+type kind_bonus =
+  | UnknownBonus
+  | IncreaseNbLasers
+  | IncreaseShootSpeed
+
+type bonus_htbl = (kind_bonus, unit -> unit) Hashtbl.t
+
+(* Some utils fucntions *)
+let bonus_to_timer (bonus : kind_bonus) : Timer.kind_timer =
+  match bonus with
+  | IncreaseNbLasers -> failwith " IncreaseNbLasers  has no timer"
+  | IncreaseShootSpeed -> failwith "IncreaseShootSpeed has no timer"
+  | UnknownBonus -> failwith "Unknown bonus"
+
+let add_bonus_list ht l =
+  List.iter (fun (kind, f) -> Hashtbl.replace ht kind f) l
+
+let chose_elt ht =
+  let opt =
+    Hashtbl.fold
+      (fun _key value acc ->
+        if Random.int 2 = 0 || Option.is_none acc then Some value else acc )
+      ht None
+  in
+  match opt with None -> failwith "Any bonus available" | Some f -> f
+
 (* common_bonus *)
 
-let common_bonus = [| (fun () -> ()) |]
+let common_bonus : bonus_htbl = Hashtbl.create 16
+
+let () = add_bonus_list common_bonus [ (UnknownBonus, fun () -> ()) ]
 
 (* uncommon_bonus *)
 
-let uncommon_bonus = [| (fun () -> ()) |]
+let uncommon_bonus : bonus_htbl = Hashtbl.create 16
+
+let () = add_bonus_list uncommon_bonus [ (UnknownBonus, fun () -> ()) ]
 
 (* rare_bonus *)
 
-let rare_bonus = [| (fun () -> ()) |]
+let rare_bonus : bonus_htbl = Hashtbl.create 16
+
+let () = add_bonus_list rare_bonus [ (UnknownBonus, fun () -> ()) ]
 
 (* epic_bonus *)
 
-let epic_bonus = [| (fun () -> ()) |]
+let epic_bonus : bonus_htbl = Hashtbl.create 16
+
+let () = add_bonus_list epic_bonus [ (UnknownBonus, fun () -> ()) ]
 
 (* legendary_bonus *)
 
-let increase_nb_lasers () = Laser.nb_lasers := min 8 (!Laser.nb_lasers + 1)
+let legendary_bonus : bonus_htbl = Hashtbl.create 16
 
-let increase_shoot_speed () = Ovni.delay := max 5 (!Ovni.delay - 3)
+let increase_nb_lasers () =
+  Laser.nb_lasers := !Laser.nb_lasers + 1;
+  if !Laser.nb_lasers = 8 then Hashtbl.remove legendary_bonus IncreaseNbLasers
 
-let legendary_bonus = [| increase_nb_lasers; increase_shoot_speed |]
+let increase_shoot_speed () =
+  Ovni.delay := !Ovni.delay - 3;
+  if !Ovni.delay = 5 then Hashtbl.remove legendary_bonus IncreaseShootSpeed
+
+let () =
+  add_bonus_list legendary_bonus
+    [ (IncreaseNbLasers, increase_nb_lasers)
+    ; (IncreaseShootSpeed, increase_shoot_speed)
+    ]
 
 (* get_bonus *)
 
@@ -42,5 +88,5 @@ let get_bonus () =
       (common_bonus, Texture.Asteroid_common)
   in
 
-  let rd = Random.int (Array.length bonus) in
-  (bonus.(rd), texture)
+  let f = chose_elt bonus in
+  (f, texture)
