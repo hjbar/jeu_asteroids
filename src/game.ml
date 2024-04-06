@@ -58,6 +58,7 @@ let update config dt =
   Timer.update_all ();
   Ecs.System.update_all dt;
   Print.print ();
+
   if Ovni.is_alive () then true
   else (
     Print.game_over ();

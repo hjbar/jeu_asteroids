@@ -39,8 +39,7 @@ let init_ovni x y =
 
     ovni#hp#set 5;
     ovni#invincible#set false;
-    ovni#invincible_timer#set 0;
-    ovni#laser_timer#set 0;
+    ovni#allow_to_shoot#set true;
 
     Collision_system.register (ovni :> box);
     Forces_system.register (ovni :> collidable);

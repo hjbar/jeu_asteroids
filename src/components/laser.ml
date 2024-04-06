@@ -66,7 +66,7 @@ let create () =
       Entities.lasers#replace v#id#get v )
     lasers;
 
-  Ovni.reset_laser_timer ()
+  Ovni.has_shot ()
 
 (* Maj les lasers *)
 let remove_old_lasers =
@@ -83,13 +83,11 @@ let remove_old_lasers =
               Rect.intersect v#pos#get v#rect#get screen#pos#get screen#rect#get
             then init
             else (k, v) :: init )
-          (* Global.lasers_table *) Entities.lasers#table []
+          Entities.lasers#table []
       in
       List.iter
         (fun (k, v) ->
-          (* Hashtbl.remove Global.lasers_table k; *)
           Entities.lasers#remove k;
-          v#is_offscreen#set true;
-          Gc.full_major () )
+          v#is_offscreen#set true )
         old
     end

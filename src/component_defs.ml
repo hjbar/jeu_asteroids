@@ -109,18 +109,11 @@ class invincible =
     method invincible = invincible
   end
 
-class invincible_timer =
+class allow_to_shoot =
   object
-    val invincible_timer = Component.def 0
+    val allow_to_shoot = Component.def false
 
-    method invincible_timer = invincible_timer
-  end
-
-class laser_timer =
-  object
-    val laser_timer = Component.def 0
-
-    method laser_timer = laser_timer
+    method allow_to_shoot = allow_to_shoot
   end
 
 (* Some complex components *)
@@ -203,9 +196,7 @@ class ovni =
 
     inherit invincible
 
-    inherit invincible_timer
-
-    inherit laser_timer
+    inherit allow_to_shoot
   end
 
 class box_collection (b : bool) =
