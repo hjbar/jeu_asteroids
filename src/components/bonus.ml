@@ -55,7 +55,7 @@ let () = add_bonus_list epic_bonus [ (UnknownBonus, fun () -> ()) ]
 let legendary_bonus : bonus_htbl = Hashtbl.create 16
 
 let increase_nb_lasers () =
-  Laser.nb_lasers := !Laser.nb_lasers + 1;
+  incr Laser.nb_lasers;
   if !Laser.nb_lasers = 8 then Hashtbl.remove legendary_bonus IncreaseNbLasers
 
 let increase_shoot_speed () =
