@@ -35,4 +35,9 @@ let update_all () =
     to_remove
 
 let active_bonuses () =
-  Hashtbl.fold (fun k v init -> match k with | OvniDelayShoot | OvniInvicible -> init | b -> (b, v.time)::init) timers []
+  Hashtbl.fold
+    (fun k v init ->
+      match k with
+      | OvniDelayShoot | OvniInvicible -> init
+      | b -> (b, v.time) :: init )
+    timers []

@@ -29,22 +29,22 @@ let anim_from_surface ctx surface n w h dw dh frame_duration =
 
 (* Stuff pour créer les textures *)
 type kind_texture =
-| Ovni
-| Asteroid
-| Asteroid_common
-| Asteroid_uncommon
-| Asteroid_rare
-| Asteroid_epic
-| Asteroid_legendary
-| Laser
-| Background
-| Icon_heart
-| Icon_nb_lasers
-| Icon_split_shoot
-| Icon_star
-| Icon_speed_boost_common
-| Icon_speed_boost_uncommon
-| Icon_speed_boost_rare
+  | Ovni
+  | Asteroid
+  | Asteroid_common
+  | Asteroid_uncommon
+  | Asteroid_rare
+  | Asteroid_epic
+  | Asteroid_legendary
+  | Laser
+  | Background
+  | Icon_heart
+  | Icon_nb_lasers
+  | Icon_split_shoot
+  | Icon_star
+  | Icon_speed_boost_common
+  | Icon_speed_boost_uncommon
+  | Icon_speed_boost_rare
 
 let textures = Hashtbl.create 16
 
@@ -74,21 +74,21 @@ let load_all _dt =
 
   Hashtbl.replace textures Background
     (Gfx.load_image ctx "resources/images/background.png");
-    
+
   Hashtbl.replace textures Icon_heart
-  (Gfx.load_image ctx "resources/images/icon_heart.png");
+    (Gfx.load_image ctx "resources/images/icon_heart.png");
   Hashtbl.replace textures Icon_nb_lasers
-  (Gfx.load_image ctx "resources/images/icon_nb_lasers.png");
+    (Gfx.load_image ctx "resources/images/icon_nb_lasers.png");
   Hashtbl.replace textures Icon_split_shoot
-  (Gfx.load_image ctx "resources/images/icon_split_shoot.png");
+    (Gfx.load_image ctx "resources/images/icon_split_shoot.png");
   Hashtbl.replace textures Icon_star
-  (Gfx.load_image ctx "resources/images/icon_star.png");
+    (Gfx.load_image ctx "resources/images/icon_star.png");
   Hashtbl.replace textures Icon_speed_boost_common
-  (Gfx.load_image ctx "resources/images/icon_speed_common.png");
+    (Gfx.load_image ctx "resources/images/icon_speed_common.png");
   Hashtbl.replace textures Icon_speed_boost_uncommon
-  (Gfx.load_image ctx "resources/images/icon_speed_uncommon.png");
+    (Gfx.load_image ctx "resources/images/icon_speed_uncommon.png");
   Hashtbl.replace textures Icon_speed_boost_rare
-  (Gfx.load_image ctx "resources/images/icon_speed_rare.png");
+    (Gfx.load_image ctx "resources/images/icon_speed_rare.png");
 
   false
 

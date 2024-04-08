@@ -43,8 +43,7 @@ let common_bonus : bonus_htbl = Hashtbl.create 16
 
 let common_speed_boost () =
   Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
-  let f () =
-    Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075) in
+  let f () = Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075) in
   Timer.add (bonus_to_timer SpeedBoostCommon) 180 f
 
 let () = add_bonus_list common_bonus [ (SpeedBoostCommon, common_speed_boost) ]
@@ -55,12 +54,11 @@ let uncommon_bonus : bonus_htbl = Hashtbl.create 16
 
 let uncommon_speed_boost () =
   Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
-  let f () =
-    Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075)
-  in
+  let f () = Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075) in
   Timer.add (bonus_to_timer SpeedBoostUncommon) 300 f
 
-let () = add_bonus_list uncommon_bonus [ (SpeedBoostUncommon, uncommon_speed_boost) ]
+let () =
+  add_bonus_list uncommon_bonus [ (SpeedBoostUncommon, uncommon_speed_boost) ]
 
 (* rare_bonus *)
 

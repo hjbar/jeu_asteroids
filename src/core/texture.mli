@@ -27,7 +27,7 @@ type kind_texture =
   | Laser
   | Background
   | Icon_heart
-  | Icon_nb_lasers  
+  | Icon_nb_lasers
   | Icon_split_shoot
   | Icon_star
   | Icon_speed_boost_common
