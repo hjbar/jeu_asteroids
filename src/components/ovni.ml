@@ -1,8 +1,10 @@
 (* Getter of the ovni reference *)
 let ovni () = match !Entities.ovni with Some o -> o | None -> assert false
 
-(* Setter of sum forces *)
+(* To manage ovni's movements *)
 let set_sum_forces v = (ovni ())#sum_forces#set v
+
+let set_under_gravity b = (ovni ())#under_gravity#set b
 
 (* Getter of position *)
 let get_x () = (ovni ())#pos#get.x
@@ -20,7 +22,9 @@ let decr_hp () =
   if not (ovni ())#invincible#get then begin
     (ovni ())#hp#set ((ovni ())#hp#get - 1);
     (ovni ())#invincible#set true;
-    let f () = (ovni ())#invincible#set false in
+    let f () =
+      if not (Scoring.mk_star ()) then (ovni ())#invincible#set false
+    in
     Timer.add Timer.OvniInvicible 160 f
   end
 

@@ -1,5 +1,7 @@
-(* Setter of sum forces *)
+(* To manage ovni's movements *)
 val set_sum_forces : Vector.t -> unit
+
+val set_under_gravity : bool -> unit
 
 (* Getter of position *)
 val get_x : unit -> float

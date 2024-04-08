@@ -103,13 +103,13 @@ let increase_shoot_speed () =
 let mario_kart_star () =
   if not (Scoring.mk_star ()) then begin
     Scoring.active_mk_star ();
-    Global.active_mk_star_speed ();
+    Ovni.set_under_gravity false;
     Ovni.set_invincibility true
   end;
 
   let f () =
     Scoring.reset_mk_star ();
-    Global.reset_mk_star_speed ();
+    Ovni.set_under_gravity true;
     Ovni.set_invincibility false
   in
 
