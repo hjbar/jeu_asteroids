@@ -50,6 +50,7 @@ let print () =
       | SpeedBoostCommon -> Icon_speed_boost_common
       | SpeedBoostUncommon -> Icon_speed_boost_uncommon
       | SpeedBoostRare -> Icon_speed_boost_rare
+      | DoubleScore -> Icon_star (* TEMPORAIRE *)
       | _ -> failwith "wont happen"
     in
     let size = 48 in

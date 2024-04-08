@@ -10,6 +10,7 @@ type kind_bonus =
   | SpeedBoostUncommon
   | SpeedBoostRare
   | UpgradeScore
+  | DoubleScore
 
 type bonus_htbl = (kind_bonus, unit -> unit) Hashtbl.t
 
@@ -22,6 +23,7 @@ let bonus_to_timer (bonus : kind_bonus) : Timer.kind_timer =
   | SpeedBoostCommon -> SpeedBoostCommon
   | SpeedBoostUncommon -> SpeedBoostUncommon
   | SpeedBoostRare -> SpeedBoostRare
+  | DoubleScore -> DoubleScore
   | IncreaseNbLasers -> failwith "IncreaseNbLasers has no timer"
   | IncreaseShootSpeed -> failwith "IncreaseShootSpeed has no timer"
   | UpgradeScore -> failwith "UpgradeScore has no timer"
@@ -79,8 +81,16 @@ let uncommon_speed_boost =
     in
     Timer.add (bonus_to_timer SpeedBoostUncommon) 300 f
 
+let double_score =
+  let already_double = ref false in
+  fun () ->
+    if not !already_double then Scoring.set_factor 2.;
+    let f () = Scoring.set_factor 1. in
+    Timer.add (bonus_to_timer DoubleScore) 600 f
+
 let () =
-  add_bonus_list uncommon_bonus [ (SpeedBoostUncommon, uncommon_speed_boost) ]
+  add_bonus_list uncommon_bonus
+    [ (SpeedBoostUncommon, uncommon_speed_boost); (DoubleScore, double_score) ]
 
 (* rare_bonus *)
 

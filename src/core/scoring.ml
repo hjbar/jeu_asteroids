@@ -11,11 +11,13 @@ let mk_star, active_mk_star, reset_mk_star =
       Global.set_gravity !old_gravity;
       mk_star := false )
 
-let get, update, add =
+let get, update, add, set_factor =
   let scoring = ref 0. in
+  let factor = ref 1. in
   ( (fun () -> !scoring)
-  , (fun () -> scoring := !scoring +. (10. *. Global.gravity ()))
-  , fun x -> scoring := !scoring +. x )
+  , (fun () -> scoring := !scoring +. (!factor *. 10. *. Global.gravity ()))
+  , (fun x -> scoring := !scoring +. x)
+  , fun x -> factor := x )
 
 let get_wave, incr_wave =
   let wc = ref 0 in
