@@ -188,7 +188,6 @@ let paterns = [| pattern_1; pattern_2; pattern_3; pattern_4 |]
 
 (* Lance l'init des asteroids *)
 let init_asteroids () =
-  Global.set_gravity (Global.gravity () *. 1.1);
   Scoring.incr_wave ();
   let rand = Random.int (Array.length paterns) in
   paterns.(rand) ()

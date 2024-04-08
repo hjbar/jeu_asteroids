@@ -27,6 +27,15 @@ let ovni_w, ovni_h =
   let factor = 2.5 in
   (int_of_float (19. *. factor), int_of_float (32. *. factor))
 
+let get_ovni_speed, active_mk_star_speed, reset_mk_star_speed =
+  let speed = ref 0.1 in
+  let old_speed = ref 0.1 in
+  ( (fun () -> !speed)
+  , (fun () ->
+      old_speed := !speed;
+      speed := 5. *. !speed )
+  , fun () -> speed := !old_speed )
+
 (* ASTEROIDS *)
 let asteroid_size = 60
 

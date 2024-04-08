@@ -39,7 +39,7 @@ let update config dt =
   let dx = ref 0. in
   let dy = ref 0. in
 
-  let v = 0.1 in
+  let v = Global.get_ovni_speed () in
 
   if has_key config.up then dy := !dy -. v;
   if has_key config.down then dy := !dy +. v;

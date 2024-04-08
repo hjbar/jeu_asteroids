@@ -5,6 +5,7 @@ type kind_bonus =
   | IncreaseNbLasers
   | IncreaseShootSpeed
   | SplitShoot
+  | MarioKartStar
 
 type bonus_htbl = (kind_bonus, unit -> unit) Hashtbl.t
 
@@ -12,6 +13,7 @@ type bonus_htbl = (kind_bonus, unit -> unit) Hashtbl.t
 let bonus_to_timer (bonus : kind_bonus) : Timer.kind_timer =
   match bonus with
   | SplitShoot -> SplitShoot
+  | MarioKartStar -> MarioKartStar
   | IncreaseNbLasers -> failwith " IncreaseNbLasers  has no timer"
   | IncreaseShootSpeed -> failwith "IncreaseShootSpeed has no timer"
   | UnknownBonus -> failwith "Unknown bonus"
@@ -75,11 +77,26 @@ let increase_shoot_speed () =
     Hashtbl.remove legendary_bonus IncreaseShootSpeed
   end
 
+let mario_kart_star () =
+  if not (Scoring.mk_star ()) then begin
+    Scoring.active_mk_star ();
+    Global.active_mk_star_speed ();
+    Ovni.set_invincibility true
+  end;
+
+  let f () =
+    Scoring.reset_mk_star ();
+    Global.reset_mk_star_speed ();
+    Ovni.set_invincibility false
+  in
+
+  Timer.add (bonus_to_timer MarioKartStar) 600 f
+
 let () =
   add_bonus_list legendary_bonus
     [ (IncreaseNbLasers, increase_nb_lasers)
     ; (IncreaseShootSpeed, increase_shoot_speed)
-    ; (UnknownBonus, fun () -> ())
+    ; (MarioKartStar, mario_kart_star)
     ]
 
 (* get_bonus *)

@@ -2,6 +2,7 @@ type kind_timer =
   | OvniDelayShoot
   | OvniInvicible
   | SplitShoot
+  | MarioKartStar
 
 type typ_timer =
   { mutable time : int
