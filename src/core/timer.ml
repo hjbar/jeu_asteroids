@@ -7,6 +7,7 @@ type kind_timer =
   | SpeedBoostUncommon
   | SpeedBoostRare
   | DoubleScore
+  | Nuke
 
 type typ_timer =
   { mutable time : int

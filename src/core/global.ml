@@ -34,6 +34,8 @@ let get_ovni_speed, set_ovni_speed =
 (* ASTEROIDS *)
 let asteroid_size = 60
 
+let no_spawn = ref false
+
 (* GRAVITY *)
 let gravity, set_gravity =
   let gravity_r = ref 0.015 in

@@ -39,38 +39,42 @@ let rec create_asteroid x y id level =
 
   ast#remove#set (fun () ->
       f ();
-      if ast#is_dead#get then f_bonus ();
-      let lvl = ast#level#get - 1 in
-      if ast#is_dead#get && lvl >= 0 then
-        let ast_size = Global.asteroid_size in
 
-        let x = int_of_float ast#pos#get.x in
-        let y = int_of_float ast#pos#get.y in
+      if ast#is_dead#get then begin
+        f_bonus ();
 
         let lvl = ast#level#get - 1 in
+        if lvl >= 0 && not !Global.no_spawn then
+          let ast_size = Global.asteroid_size in
 
-        let factor = [| 10.; 1. |].(lvl) in
-        let vx = 0.5 /. factor in
-        let vy = 1. /. factor in
+          let x = int_of_float ast#pos#get.x in
+          let y = int_of_float ast#pos#get.y in
 
-        if lvl >= 0 then begin
-          create_asteroid_with_sumforces (x - ast_size) (y - ast_size)
-            (id ^ "_0")
-            Vector.{ x = -1. *. vx; y = -0.75 *. vy }
-            lvl;
-          create_asteroid_with_sumforces (x + ast_size) (y - ast_size)
-            (id ^ "_1")
-            Vector.{ x = vx; y = -0.75 *. vy }
-            lvl;
-          create_asteroid_with_sumforces (x - ast_size) (y + ast_size)
-            (id ^ "_2")
-            Vector.{ x = -1. *. vx; y = vy }
-            lvl;
-          create_asteroid_with_sumforces (x + ast_size) (y + ast_size)
-            (id ^ "_3")
-            Vector.{ x = vx; y = vy }
-            lvl
-        end );
+          let lvl = ast#level#get - 1 in
+
+          let factor = [| 10.; 1. |].(lvl) in
+          let vx = 0.5 /. factor in
+          let vy = 1. /. factor in
+
+          if lvl >= 0 then begin
+            create_asteroid_with_sumforces (x - ast_size) (y - ast_size)
+              (id ^ "_0")
+              Vector.{ x = -1. *. vx; y = -0.75 *. vy }
+              lvl;
+            create_asteroid_with_sumforces (x + ast_size) (y - ast_size)
+              (id ^ "_1")
+              Vector.{ x = vx; y = -0.75 *. vy }
+              lvl;
+            create_asteroid_with_sumforces (x - ast_size) (y + ast_size)
+              (id ^ "_2")
+              Vector.{ x = -1. *. vx; y = vy }
+              lvl;
+            create_asteroid_with_sumforces (x + ast_size) (y + ast_size)
+              (id ^ "_3")
+              Vector.{ x = vx; y = vy }
+              lvl
+          end
+      end );
   Entities.asteroids#replace id ast;
   ast
 
@@ -208,7 +212,8 @@ let remove_old_asteroids =
   (* si collision avec zone d'affichage, alors ils sont encore visibles donc on les garde
      sinon ils sont hors écrans et on les vire *)
   fun () ->
-    begin
+    if !Global.no_spawn then ()
+    else begin
       let asteroids_required =
         min (max 1 (int_of_float (Global.gravity ()))) 32
       in

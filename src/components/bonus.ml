@@ -1,7 +1,6 @@
 (* Some types *)
 
 type kind_bonus =
-  | UnknownBonus
   | IncreaseNbLasers
   | IncreaseShootSpeed
   | SplitShoot
@@ -11,6 +10,7 @@ type kind_bonus =
   | SpeedBoostRare
   | UpgradeScore
   | DoubleScore
+  | Nuke
 
 type bonus_htbl = (kind_bonus, unit -> unit) Hashtbl.t
 
@@ -24,10 +24,10 @@ let bonus_to_timer (bonus : kind_bonus) : Timer.kind_timer =
   | SpeedBoostUncommon -> SpeedBoostUncommon
   | SpeedBoostRare -> SpeedBoostRare
   | DoubleScore -> DoubleScore
+  | Nuke -> Nuke
   | IncreaseNbLasers -> failwith "IncreaseNbLasers has no timer"
   | IncreaseShootSpeed -> failwith "IncreaseShootSpeed has no timer"
   | UpgradeScore -> failwith "UpgradeScore has no timer"
-  | UnknownBonus -> failwith "Unknown bonus"
 
 let add_bonus_list ht l =
   List.iter (fun (kind, f) -> Hashtbl.replace ht kind f) l
@@ -112,7 +112,23 @@ let () =
 
 let epic_bonus : bonus_htbl = Hashtbl.create 16
 
-let () = add_bonus_list epic_bonus [ (UnknownBonus, fun () -> ()) ]
+let nuke () =
+  let l =
+    Hashtbl.fold
+      (fun key value acc -> (key, value) :: acc)
+      Entities.asteroids#table []
+  in
+  List.iter
+    (fun (key, value) ->
+      Entities.asteroids#remove key;
+      value#is_offscreen#set true )
+    l;
+
+  Global.no_spawn := true;
+  let f () = Global.no_spawn := false in
+  Timer.add (bonus_to_timer Nuke) 1 f
+
+let () = add_bonus_list epic_bonus [ (Nuke, nuke) ]
 
 (* legendary_bonus *)
 
