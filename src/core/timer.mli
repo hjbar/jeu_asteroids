@@ -3,7 +3,9 @@ type kind_timer =
   | OvniInvicible
   | SplitShoot
   | MarioKartStar
-  | SpeedBoost
+  | SpeedBoostCommon
+  | SpeedBoostUncommon
+  | SpeedBoostRare
 
 type typ_timer =
   { mutable time : int
@@ -13,3 +15,5 @@ type typ_timer =
 val add : kind_timer -> int -> (unit -> unit) -> unit
 
 val update_all : unit -> unit
+
+val active_bonuses : unit -> (kind_timer * int) list

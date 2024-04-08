@@ -3,7 +3,9 @@ type kind_timer =
   | OvniInvicible
   | SplitShoot
   | MarioKartStar
-  | SpeedBoost
+  | SpeedBoostCommon
+  | SpeedBoostUncommon
+  | SpeedBoostRare
 
 type typ_timer =
   { mutable time : int
@@ -31,3 +33,6 @@ let update_all () =
       (Hashtbl.find timers kind).f ();
       Hashtbl.remove timers kind )
     to_remove
+
+let active_bonuses () =
+  Hashtbl.fold (fun k v init -> match k with | OvniDelayShoot | OvniInvicible -> init | b -> (b, v.time)::init) timers []

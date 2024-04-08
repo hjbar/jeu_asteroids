@@ -6,12 +6,11 @@ type kind_bonus =
   | IncreaseShootSpeed
   | SplitShoot
   | MarioKartStar
-  | SpeedBoost
+  | SpeedBoostCommon
+  | SpeedBoostUncommon
+  | SpeedBoostRare
 
 type bonus_htbl = (kind_bonus, unit -> unit) Hashtbl.t
-
-(* Some references *)
-let is_speed_boost = ref false
 
 (* Some utils fucntions *)
 
@@ -19,7 +18,9 @@ let bonus_to_timer (bonus : kind_bonus) : Timer.kind_timer =
   match bonus with
   | SplitShoot -> SplitShoot
   | MarioKartStar -> MarioKartStar
-  | SpeedBoost -> SpeedBoost
+  | SpeedBoostCommon -> SpeedBoostCommon
+  | SpeedBoostUncommon -> SpeedBoostUncommon
+  | SpeedBoostRare -> SpeedBoostRare
   | IncreaseNbLasers -> failwith " IncreaseNbLasers  has no timer"
   | IncreaseShootSpeed -> failwith "IncreaseShootSpeed has no timer"
   | UnknownBonus -> failwith "Unknown bonus"
@@ -41,34 +42,25 @@ let chose_elt ht =
 let common_bonus : bonus_htbl = Hashtbl.create 16
 
 let common_speed_boost () =
-  if not !is_speed_boost then begin
-    Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
-    is_speed_boost := true
-  end;
+  Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
   let f () =
-    Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075);
-    is_speed_boost := false
-  in
-  Timer.add (bonus_to_timer SpeedBoost) 180 f
+    Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075) in
+  Timer.add (bonus_to_timer SpeedBoostCommon) 180 f
 
-let () = add_bonus_list common_bonus [ (SpeedBoost, common_speed_boost) ]
+let () = add_bonus_list common_bonus [ (SpeedBoostCommon, common_speed_boost) ]
 
 (* uncommon_bonus *)
 
 let uncommon_bonus : bonus_htbl = Hashtbl.create 16
 
 let uncommon_speed_boost () =
-  if not !is_speed_boost then begin
-    Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
-    is_speed_boost := true
-  end;
+  Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
   let f () =
-    Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075);
-    is_speed_boost := false
+    Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075)
   in
-  Timer.add (bonus_to_timer SpeedBoost) 300 f
+  Timer.add (bonus_to_timer SpeedBoostUncommon) 300 f
 
-let () = add_bonus_list uncommon_bonus [ (SpeedBoost, uncommon_speed_boost) ]
+let () = add_bonus_list uncommon_bonus [ (SpeedBoostUncommon, uncommon_speed_boost) ]
 
 (* rare_bonus *)
 
@@ -84,7 +76,7 @@ let rare_speed_boost () =
 
 let () =
   add_bonus_list rare_bonus
-    [ (SplitShoot, split_shoot); (SpeedBoost, rare_speed_boost) ]
+    [ (SplitShoot, split_shoot); (SpeedBoostRare, rare_speed_boost) ]
 
 (* epic_bonus *)
 
