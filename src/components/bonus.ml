@@ -41,10 +41,18 @@ let chose_elt ht =
 
 let common_bonus : bonus_htbl = Hashtbl.create 16
 
-let common_speed_boost () =
-  Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
-  let f () = Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075) in
-  Timer.add (bonus_to_timer SpeedBoostCommon) 180 f
+let common_speed_boost =
+  let already_boost = ref false in
+  fun () ->
+    if not !already_boost then begin
+      Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
+      already_boost := true
+    end;
+    let f () =
+      Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075);
+      already_boost := false
+    in
+    Timer.add (bonus_to_timer SpeedBoostCommon) 180 f
 
 let () = add_bonus_list common_bonus [ (SpeedBoostCommon, common_speed_boost) ]
 
@@ -52,10 +60,18 @@ let () = add_bonus_list common_bonus [ (SpeedBoostCommon, common_speed_boost) ]
 
 let uncommon_bonus : bonus_htbl = Hashtbl.create 16
 
-let uncommon_speed_boost () =
-  Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
-  let f () = Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075) in
-  Timer.add (bonus_to_timer SpeedBoostUncommon) 300 f
+let uncommon_speed_boost =
+  let already_boost = ref false in
+  fun () ->
+    if not !already_boost then begin
+      Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
+      already_boost := true
+    end;
+    let f () =
+      Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075);
+      already_boost := false
+    in
+    Timer.add (bonus_to_timer SpeedBoostUncommon) 300 f
 
 let () =
   add_bonus_list uncommon_bonus [ (SpeedBoostUncommon, uncommon_speed_boost) ]
