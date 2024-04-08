@@ -6,14 +6,20 @@ type kind_bonus =
   | IncreaseShootSpeed
   | SplitShoot
   | MarioKartStar
+  | SpeedBoost
 
 type bonus_htbl = (kind_bonus, unit -> unit) Hashtbl.t
 
+(* Some references *)
+let is_speed_boost = ref false
+
 (* Some utils fucntions *)
+
 let bonus_to_timer (bonus : kind_bonus) : Timer.kind_timer =
   match bonus with
   | SplitShoot -> SplitShoot
   | MarioKartStar -> MarioKartStar
+  | SpeedBoost -> SpeedBoost
   | IncreaseNbLasers -> failwith " IncreaseNbLasers  has no timer"
   | IncreaseShootSpeed -> failwith "IncreaseShootSpeed has no timer"
   | UnknownBonus -> failwith "Unknown bonus"
@@ -34,13 +40,35 @@ let chose_elt ht =
 
 let common_bonus : bonus_htbl = Hashtbl.create 16
 
-let () = add_bonus_list common_bonus [ (UnknownBonus, fun () -> ()) ]
+let common_speed_boost () =
+  if not !is_speed_boost then begin
+    Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
+    is_speed_boost := true
+  end;
+  let f () =
+    Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075);
+    is_speed_boost := false
+  in
+  Timer.add (bonus_to_timer SpeedBoost) 180 f
+
+let () = add_bonus_list common_bonus [ (SpeedBoost, common_speed_boost) ]
 
 (* uncommon_bonus *)
 
 let uncommon_bonus : bonus_htbl = Hashtbl.create 16
 
-let () = add_bonus_list uncommon_bonus [ (UnknownBonus, fun () -> ()) ]
+let uncommon_speed_boost () =
+  if not !is_speed_boost then begin
+    Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
+    is_speed_boost := true
+  end;
+  let f () =
+    Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075);
+    is_speed_boost := false
+  in
+  Timer.add (bonus_to_timer SpeedBoost) 300 f
+
+let () = add_bonus_list uncommon_bonus [ (SpeedBoost, uncommon_speed_boost) ]
 
 (* rare_bonus *)
 
@@ -51,7 +79,12 @@ let split_shoot () =
   let f () = Laser.split_shoot := false in
   Timer.add (bonus_to_timer SplitShoot) 300 f
 
-let () = add_bonus_list rare_bonus [ (SplitShoot, split_shoot) ]
+let rare_speed_boost () =
+  Global.set_ovni_speed (Global.get_ovni_speed () +. 0.025)
+
+let () =
+  add_bonus_list rare_bonus
+    [ (SplitShoot, split_shoot); (SpeedBoost, rare_speed_boost) ]
 
 (* epic_bonus *)
 

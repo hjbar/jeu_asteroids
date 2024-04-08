@@ -21,7 +21,7 @@ let rec create_asteroid x y id level =
   let drag = 0. in
   let rebound = 0.95 in
 
-  let is_bonus = Random.int 100 < 5 in
+  let is_bonus = Random.int 100 < 500 in
   let f_bonus, kind_texture =
     if is_bonus then Bonus.get_bonus () else ((fun () -> ()), Asteroid)
   in
