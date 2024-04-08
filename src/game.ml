@@ -56,6 +56,7 @@ let update config dt =
   Laser.remove_old_lasers ();
   Scoring.update ();
   Timer.update_all ();
+  Background.update ();
   Ecs.System.update_all dt;
   Print.print ();
 

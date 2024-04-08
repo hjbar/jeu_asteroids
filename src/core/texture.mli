@@ -25,6 +25,7 @@ type kind_texture =
   | Asteroid_epic
   | Asteroid_legendary
   | Laser
+  | Background
 
 val get : kind_texture -> Gfx.surface Gfx.resource
 

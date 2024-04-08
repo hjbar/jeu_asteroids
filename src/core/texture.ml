@@ -37,6 +37,7 @@ type kind_texture =
   | Asteroid_epic
   | Asteroid_legendary
   | Laser
+  | Background
 
 let textures = Hashtbl.create 16
 
@@ -63,6 +64,9 @@ let load_all _dt =
 
   Hashtbl.replace textures Laser
     (Gfx.load_image ctx "resources/anims/laser.png");
+
+  Hashtbl.replace textures Background
+    (Gfx.load_image ctx "resources/images/background.png");
 
   false
 
