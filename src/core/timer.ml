@@ -1,6 +1,7 @@
 type kind_timer =
   | OvniDelayShoot
   | OvniInvicible
+  | SplitShoot
 
 type typ_timer =
   { mutable time : int
@@ -19,7 +20,7 @@ let update_all () =
     Hashtbl.fold
       (fun key value acc ->
         value.time <- value.time - 1;
-        if value.time = 0 then key :: acc else acc )
+        if value.time <= 0 then key :: acc else acc )
       timers []
   in
 
