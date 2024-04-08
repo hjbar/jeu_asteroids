@@ -21,7 +21,7 @@ let rec create_asteroid x y id level =
   let drag = 0. in
   let rebound = 0.95 in
 
-  let is_bonus = Random.int 100 < 5 in
+  let is_bonus = Random.int 100 < 500 in
   let f_bonus, kind_texture =
     if is_bonus then Bonus.get_bonus () else ((fun () -> ()), Asteroid)
   in
@@ -188,7 +188,6 @@ let paterns = [| pattern_1; pattern_2; pattern_3; pattern_4 |]
 
 (* Lance l'init des asteroids *)
 let init_asteroids () =
-  Global.set_gravity (Global.gravity () *. 1.1);
   Scoring.incr_wave ();
   let rand = Random.int (Array.length paterns) in
   paterns.(rand) ()

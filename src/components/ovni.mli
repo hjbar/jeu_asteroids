@@ -18,6 +18,8 @@ val decr_hp : unit -> unit
 (* To manage ovni's invicibility *)
 val is_invincible : unit -> bool
 
+val set_invincibility : bool -> unit
+
 (* To manage ovni's shooting *)
 val delay : int ref
 

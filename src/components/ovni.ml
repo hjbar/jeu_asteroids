@@ -27,8 +27,10 @@ let decr_hp () =
 (* To manage ovni's invicibility *)
 let is_invincible () = (ovni ())#invincible#get
 
+let set_invincibility b = (ovni ())#invincible#set b
+
 (* To manage ovni's shooting *)
-let delay = ref 20
+let delay = ref 30
 
 let allow_to_shoot () = (ovni ())#allow_to_shoot#get
 

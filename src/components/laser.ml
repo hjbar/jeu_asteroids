@@ -8,6 +8,8 @@ let laser_larg = 2 * 3
 
 let nb_lasers = ref 1
 
+let split_shoot = ref false
+
 (* Générateur d'uid *)
 let uid =
   let cpt = ref (-1) in
@@ -33,8 +35,10 @@ let create () =
     Texture.anim_from_surface ctx surface 3 3 32 laser_larg laser_long 5
   in
 
+  let nb_lsrs = !nb_lasers + if !split_shoot && !nb_lasers = 1 then 1 else 0 in
+
   let lasers =
-    Array.init !nb_lasers (fun i ->
+    Array.init nb_lsrs (fun i ->
         let id = Printf.sprintf "laser_%d_%d" uid i in
         Box.create id x y laser_larg laser_long mass drag rebound Laser texture )
   in
@@ -44,27 +48,64 @@ let create () =
   let x = Ovni.get_x () +. dif_x in
   let y = Ovni.get_y () +. dif_y in
 
-  let d = !nb_lasers / 2 in
-  if !nb_lasers mod 2 = 0 then
+  let d = nb_lsrs / 2 in
+  if nb_lsrs mod 2 = 0 then begin
     for i = 0 to d - 1 do
-      lasers.(i)#pos#set Vector.{ x = x +. 5. -. (10. *. float (i + 1)); y };
-      lasers.(d + i)#pos#set
-        Vector.{ x = x -. 5.0 +. (10. *. float (i + 1)); y }
-    done
+      let speed1, speed2 =
+        if !split_shoot then
+          ( Vector.{ x = 0.1 -. (0.2 *. float (i + 1)); y = -0.75 }
+          , Vector.{ x = -0.1 +. (0.2 *. float (i + 1)); y = -0.75 } )
+        else (Vector.{ x = 0.; y = -0.75 }, Vector.{ x = 0.; y = -0.75 })
+      in
+
+      let decal1, decal2 = if !split_shoot then (-5., 5.) else (5., -5.) in
+
+      let l1 = lasers.(i) in
+      l1#pos#set Vector.{ x = x +. decal1 -. (10. *. float (i + 1)); y };
+      l1#velocity#set speed1;
+      Entities.lasers#replace l1#id#get l1;
+
+      let l2 = lasers.(d + i) in
+      l2#pos#set Vector.{ x = x +. decal2 +. (10. *. float (i + 1)); y };
+      l2#velocity#set speed2;
+      Entities.lasers#replace l2#id#get l2
+    done;
+
+    if !split_shoot then begin
+      let id = Printf.sprintf "laser_%d_%d" uid (nb_lsrs + 1) in
+      let las =
+        Box.create id 0 0 laser_larg laser_long mass drag rebound Laser texture
+      in
+      las#pos#set Vector.{ x; y };
+      las#velocity#set Vector.{ x = 0.; y = -0.75 };
+      Entities.lasers#replace las#id#get las
+    end
+  end
   else begin
     for i = 0 to d - 1 do
-      lasers.(i)#pos#set Vector.{ x = x -. (10. *. float (i + 1)); y };
-      lasers.(d + i + 1)#pos#set Vector.{ x = x +. (10. *. float (i + 1)); y }
-    done;
-    lasers.(d)#pos#set Vector.{ x; y }
-  end;
+      let speed1, speed2 =
+        if !split_shoot then
+          ( Vector.{ x = 0.1 -. (0.2 *. float (i + 1)); y = -0.75 }
+          , Vector.{ x = -0.1 +. (0.2 *. float (i + 1)); y = -0.75 } )
+        else (Vector.{ x = 0.; y = -0.75 }, Vector.{ x = 0.; y = -0.75 })
+      in
 
-  let speed = Vector.{ x = 0.; y = -0.75 } in
-  Array.iter
-    (fun v ->
-      v#velocity#set speed;
-      Entities.lasers#replace v#id#get v )
-    lasers;
+      let l1 = lasers.(i) in
+      l1#pos#set Vector.{ x = x -. (10. *. float (i + 1)); y };
+      l1#velocity#set speed1;
+      Entities.lasers#replace l1#id#get l1;
+
+      let l2 = lasers.(d + i + 1) in
+      l2#pos#set Vector.{ x = x +. (10. *. float (i + 1)); y };
+      l2#velocity#set speed2;
+      Entities.lasers#replace l2#id#get l2
+    done;
+
+    let l = lasers.(d) in
+    l#pos#set Vector.{ x; y };
+    l#velocity#set Vector.{ x = 0.; y = -0.75 };
+    Entities.lasers#replace l#id#get l
+  end;
 
   Ovni.has_shot ()
 

@@ -4,12 +4,22 @@ type kind_bonus =
   | UnknownBonus
   | IncreaseNbLasers
   | IncreaseShootSpeed
+  | SplitShoot
+  | MarioKartStar
+  | SpeedBoost
 
 type bonus_htbl = (kind_bonus, unit -> unit) Hashtbl.t
 
+(* Some references *)
+let is_speed_boost = ref false
+
 (* Some utils fucntions *)
+
 let bonus_to_timer (bonus : kind_bonus) : Timer.kind_timer =
   match bonus with
+  | SplitShoot -> SplitShoot
+  | MarioKartStar -> MarioKartStar
+  | SpeedBoost -> SpeedBoost
   | IncreaseNbLasers -> failwith " IncreaseNbLasers  has no timer"
   | IncreaseShootSpeed -> failwith "IncreaseShootSpeed has no timer"
   | UnknownBonus -> failwith "Unknown bonus"
@@ -30,19 +40,51 @@ let chose_elt ht =
 
 let common_bonus : bonus_htbl = Hashtbl.create 16
 
-let () = add_bonus_list common_bonus [ (UnknownBonus, fun () -> ()) ]
+let common_speed_boost () =
+  if not !is_speed_boost then begin
+    Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
+    is_speed_boost := true
+  end;
+  let f () =
+    Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075);
+    is_speed_boost := false
+  in
+  Timer.add (bonus_to_timer SpeedBoost) 180 f
+
+let () = add_bonus_list common_bonus [ (SpeedBoost, common_speed_boost) ]
 
 (* uncommon_bonus *)
 
 let uncommon_bonus : bonus_htbl = Hashtbl.create 16
 
-let () = add_bonus_list uncommon_bonus [ (UnknownBonus, fun () -> ()) ]
+let uncommon_speed_boost () =
+  if not !is_speed_boost then begin
+    Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
+    is_speed_boost := true
+  end;
+  let f () =
+    Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075);
+    is_speed_boost := false
+  in
+  Timer.add (bonus_to_timer SpeedBoost) 300 f
+
+let () = add_bonus_list uncommon_bonus [ (SpeedBoost, uncommon_speed_boost) ]
 
 (* rare_bonus *)
 
 let rare_bonus : bonus_htbl = Hashtbl.create 16
 
-let () = add_bonus_list rare_bonus [ (UnknownBonus, fun () -> ()) ]
+let split_shoot () =
+  if not !Laser.split_shoot then Laser.split_shoot := true;
+  let f () = Laser.split_shoot := false in
+  Timer.add (bonus_to_timer SplitShoot) 300 f
+
+let rare_speed_boost () =
+  Global.set_ovni_speed (Global.get_ovni_speed () +. 0.025)
+
+let () =
+  add_bonus_list rare_bonus
+    [ (SplitShoot, split_shoot); (SpeedBoost, rare_speed_boost) ]
 
 (* epic_bonus *)
 
@@ -56,16 +98,38 @@ let legendary_bonus : bonus_htbl = Hashtbl.create 16
 
 let increase_nb_lasers () =
   incr Laser.nb_lasers;
-  if !Laser.nb_lasers = 8 then Hashtbl.remove legendary_bonus IncreaseNbLasers
+  if !Laser.nb_lasers >= 6 then begin
+    Laser.nb_lasers := min 6 !Laser.nb_lasers;
+    Hashtbl.remove legendary_bonus IncreaseNbLasers
+  end
 
 let increase_shoot_speed () =
   Ovni.delay := !Ovni.delay - 3;
-  if !Ovni.delay = 5 then Hashtbl.remove legendary_bonus IncreaseShootSpeed
+  if !Ovni.delay <= 9 then begin
+    Ovni.delay := max 9 !Ovni.delay;
+    Hashtbl.remove legendary_bonus IncreaseShootSpeed
+  end
+
+let mario_kart_star () =
+  if not (Scoring.mk_star ()) then begin
+    Scoring.active_mk_star ();
+    Global.active_mk_star_speed ();
+    Ovni.set_invincibility true
+  end;
+
+  let f () =
+    Scoring.reset_mk_star ();
+    Global.reset_mk_star_speed ();
+    Ovni.set_invincibility false
+  in
+
+  Timer.add (bonus_to_timer MarioKartStar) 600 f
 
 let () =
   add_bonus_list legendary_bonus
     [ (IncreaseNbLasers, increase_nb_lasers)
     ; (IncreaseShootSpeed, increase_shoot_speed)
+    ; (MarioKartStar, mario_kart_star)
     ]
 
 (* get_bonus *)
