@@ -17,9 +17,9 @@ let rec create_asteroid x y id level =
   let l =
     [| int_of_float (float l *. 0.6); int_of_float (float l *. 0.8); l |].(level)
   in
-  let mass = [| 10.; 100.; 1000. |].(level) in
+  let mass = [| 120.; 160.; 200. |].(level) in
   let drag = 0. in
-  let rebound = 0.95 in
+  let rebound = 0.25 in
 
   let is_bonus = Random.int 100 < 500 in
   let f_bonus, kind_texture =
@@ -91,9 +91,12 @@ let pattern_1 () =
   let space = (Global.ovni_w / 2) + 10 + Global.asteroid_size in
   let nb = Global.width / space in
   let rand = Random.int nb in
+
   let speed =
     Vector.{ x = 0.; y = 3.75 +. (0.4 *. float (Scoring.get_wave ())) }
   in
+  let speed = Vector.mult 0.25 speed in
+
   let x = ref ((10 + Global.asteroid_size) / 2) in
   for i = 0 to nb - 1 do
     if i <> rand then begin
@@ -126,6 +129,8 @@ let pattern_2 () =
         (factor +. decal ())
         (Vector.normalize Vector.{ x = 1.; y = 1. })
     in
+    let speed1 = Vector.mult 0.25 speed1 in
+
     create_asteroid_with_sumforces !x1 !y1 id1 speed1 2;
 
     let id2 = Printf.sprintf "asteroids_%d" (uid ()) in
@@ -134,6 +139,8 @@ let pattern_2 () =
         (factor +. decal ())
         (Vector.normalize Vector.{ x = -3.; y = 1. })
     in
+    let speed2 = Vector.mult 0.25 speed2 in
+
     create_asteroid_with_sumforces !x2 !y2 id2 speed2 2;
 
     x1 := !x1 + space;
@@ -148,10 +155,7 @@ let pattern_3 () =
   let x = ref ((10 + Global.asteroid_size) / 2) in
   for i = 0 to nb - 1 do
     let id = Printf.sprintf "asteroids_%d" (uid ()) in
-    create_asteroid_with_sumforces
-      (!x + Random.int 5)
-      (Random.int 25 - 25 - Global.asteroid_size)
-      id
+    let speed =
       Vector.
         { x = 0.
         ; y =
@@ -159,7 +163,13 @@ let pattern_3 () =
             +. (0.4 *. float (Scoring.get_wave ()))
             +. Random.float 2.0
         }
-      2;
+    in
+    let speed = Vector.mult 0.25 speed in
+
+    create_asteroid_with_sumforces
+      (!x + Random.int 5)
+      (Random.int 25 - 25 - Global.asteroid_size)
+      id speed 2;
     x := !x + space
   done
 
@@ -170,20 +180,24 @@ let pattern_4 () =
   for v = 0 to 1 do
     for i = 0 to 4 do
       let id = Printf.sprintf "asteroids_%d" (uid ()) in
-      create_asteroid_with_sumforces
-        (!x + (i * space))
-        (-space * 4) id
+      let speed1 =
         Vector.{ x = 0.; y = 3.75 +. (0.4 *. float (Scoring.get_wave ())) }
-        2
+      in
+      let speed1 = Vector.mult 0.25 speed1 in
+
+      create_asteroid_with_sumforces (!x + (i * space)) (-space * 4) id speed1 2
     done;
     x := !x + (2 * space);
     for i = 0 to 2 do
       let id = Printf.sprintf "asteroids_%d" (uid ()) in
+      let speed2 =
+        Vector.{ x = 0.; y = 3.75 +. (0.4 *. float (Scoring.get_wave ())) }
+      in
+      let speed2 = Vector.mult 0.25 speed2 in
+
       create_asteroid_with_sumforces !x
         ((-space * 4) + ((i + 1) * space))
-        id
-        Vector.{ x = 0.; y = 3.75 +. (0.4 *. float (Scoring.get_wave ())) }
-        2
+        id speed2 2
     done;
     x := Random.int ((Global.width / 2) - width) + (Global.width / 2)
   done

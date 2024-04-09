@@ -26,6 +26,12 @@ let ovni_is_in_mortal_collision e1 e2 =
 let is_collision_between_laser_and_asteroid e1 e2 =
   (is_laser e1 && is_asteroid e2) || (is_asteroid e1 && is_laser e2)
 
+let is_collision_between_asteroid_and_ovni e1 e2 =
+  (is_ovni e1 && is_asteroid e2) || (is_asteroid e1 && is_ovni e2)
+
+let is_collision_between_asteroid_and_asteroid e1 e2 =
+  is_asteroid e1 && is_asteroid e2
+
 let is_not_collision_between_asteroid_and_wall e1 e2 =
   let b = (is_asteroid e1 && is_wall e2) || (is_wall e1 && is_asteroid e2) in
   not b
@@ -35,8 +41,7 @@ let is_not_collision_between_laser_and_wall e1 e2 =
   not b
 
 let is_not_collision_between_asteroid_and_ovni e1 e2 =
-  let b = (is_ovni e1 && is_asteroid e2) || (is_asteroid e1 && is_ovni e2) in
-  not b
+  not (is_collision_between_asteroid_and_ovni e1 e2)
 
 let is_not_collision_between_laser_and_ovni e1 e2 =
   let b = (is_ovni e1 && is_laser e2) || (is_laser e1 && is_ovni e2) in
@@ -84,6 +89,19 @@ let update dt el =
         then begin
           (* modif hp *)
           if ovni_is_in_mortal_collision e1 e2 then Ovni.decr_hp ();
+
+          (*
+            Si collision entre asteroid et (ovni ou asteroid)
+            alors on active la gravité sur la/les asteroid(s)
+          *)
+          if is_collision_between_asteroid_and_asteroid e1 e2 then begin
+            e1#under_gravity#set true;
+            e2#under_gravity#set true
+          end
+          else if is_collision_between_asteroid_and_ovni e1 e2 then begin
+            if is_asteroid e1 then e1#under_gravity#set true
+            else if is_asteroid e2 then e2#under_gravity#set true
+          end;
 
           (* On brise en 4 l'asteroid si possible et on supprime le laser *)
           if is_collision_between_laser_and_asteroid e1 e2 then begin
