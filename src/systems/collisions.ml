@@ -94,13 +94,22 @@ let update dt el =
             Si collision entre asteroid et (ovni ou asteroid)
             alors on active la gravité sur la/les asteroid(s)
           *)
+          let drag = 0.01 in
           if is_collision_between_asteroid_and_asteroid e1 e2 then begin
             e1#under_gravity#set true;
-            e2#under_gravity#set true
+            e1#drag#set drag;
+            e2#under_gravity#set true;
+            e2#drag#set drag
           end
           else if is_collision_between_asteroid_and_ovni e1 e2 then begin
-            if is_asteroid e1 then e1#under_gravity#set true
-            else if is_asteroid e2 then e2#under_gravity#set true
+            if is_asteroid e1 then begin
+              e1#under_gravity#set true;
+              e1#drag#set drag
+            end
+            else if is_asteroid e2 then begin
+              e2#under_gravity#set true;
+              e2#drag#set drag
+            end
           end;
 
           (* On brise en 4 l'asteroid si possible et on supprime le laser *)
