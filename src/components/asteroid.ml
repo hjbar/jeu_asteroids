@@ -202,7 +202,59 @@ let pattern_4 () =
     x := Random.int ((Global.width / 2) - width) + (Global.width / 2)
   done
 
-let paterns = [| pattern_1; pattern_2; pattern_3; pattern_4 |]
+(* Z pattern *)
+let pattern_5 () =
+  let size = Global.asteroid_size in
+  let factor = 7 in
+
+  let space = (Global.ovni_w / 2) + 10 + size in
+  let nb = Global.width / space in
+  let limit = 1 + Random.int (nb - 2) in
+
+  let speed =
+    Vector.{ x = 0.; y = 3.75 +. (0.4 *. float (Scoring.get_wave ())) }
+  in
+  let speed = Vector.mult 0.25 speed in
+
+  let x = ref ((10 + size) / 2) in
+  for i = 0 to nb - 1 do
+    if i = limit then begin
+      let decal_top = ref (size + (factor * size)) in
+      let decal_bot = ref size in
+      for j = 0 to factor / 4 do
+        let id1 = Printf.sprintf "asteroids_%d_1_%d" (uid ()) j in
+
+        create_asteroid_with_sumforces
+          (!x + Random.int 10 - 5)
+          (Random.int 5 - !decal_top - size)
+          id1 speed 2;
+
+        decal_top := !decal_top - size - 25;
+
+        let id2 = Printf.sprintf "asteroids_%d_2_%d" (uid ()) j in
+
+        create_asteroid_with_sumforces
+          (!x + Random.int 10 - 5)
+          (Random.int 5 - !decal_bot - size)
+          id2 speed 2;
+
+        decal_bot := !decal_bot + size + 25
+      done
+    end
+    else begin
+      let id = Printf.sprintf "asteroids_%d" (uid ()) in
+      let decal = size + if i < limit then factor * size else 0 in
+
+      create_asteroid_with_sumforces
+        (!x + Random.int 5)
+        (Random.int 25 - decal - size)
+        id speed 2
+    end;
+
+    x := !x + space
+  done
+
+let paterns = [| pattern_1; pattern_2; pattern_3; pattern_4; pattern_5 |]
 
 (* Lance l'init des asteroids *)
 let init_asteroids () =
