@@ -227,7 +227,7 @@ let pattern_5 () =
       let decal_top = ref (size + (factor * size)) in
       let decal_bot = ref size in
       for j = 0 to factor / 4 do
-        let id1 = Printf.sprintf "asteroids_%d_1_%d" (uid ()) j in
+        let id1 = Printf.sprintf "asteroids_%d" (uid ()) in
 
         create_asteroid_with_sumforces
           (!x + Random.int 10 - 5)
@@ -236,7 +236,7 @@ let pattern_5 () =
 
         decal_top := !decal_top - size - 25;
 
-        let id2 = Printf.sprintf "asteroids_%d_2_%d" (uid ()) j in
+        let id2 = Printf.sprintf "asteroids_%d" (uid ()) in
 
         create_asteroid_with_sumforces
           (!x + Random.int 10 - 5)
