@@ -87,6 +87,8 @@ and create_asteroid_with_sumforces x y id sum_forces level =
   ast#sum_forces#set sum_forces
 
 (* Les différents paterns des asteroids *)
+
+(* Single line *)
 let pattern_1 () =
   let space = (Global.ovni_w / 2) + 10 + Global.asteroid_size in
   let nb = Global.width / space in
@@ -109,6 +111,7 @@ let pattern_1 () =
     x := !x + space
   done
 
+(* Zig-Zag pattern *)
 let pattern_2 () =
   let decal () = (float (Random.int 50) -. 25.) /. 100. in
   let space = 2 * Global.asteroid_size in
@@ -148,6 +151,7 @@ let pattern_2 () =
     y2 := !y2 + space
   done
 
+(* Single line with difference of speed *)
 let pattern_3 () =
   let space = (Global.ovni_w / 2) + 10 + Global.asteroid_size in
   let nb = Global.width / space in
@@ -173,6 +177,7 @@ let pattern_3 () =
     x := !x + space
   done
 
+(* double little T pattern *)
 let pattern_4 () =
   let space = (Global.ovni_w / 2) + 10 + Global.asteroid_size in
   let width = (5 * space) + 10 in
