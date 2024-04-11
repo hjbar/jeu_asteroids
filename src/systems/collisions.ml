@@ -95,19 +95,25 @@ let update dt el =
             alors on active la gravité sur la/les asteroid(s)
           *)
           let drag = 0.01 in
+          let rebound = 0.75 in
           if is_collision_between_asteroid_and_asteroid e1 e2 then begin
             e1#under_gravity#set true;
+            e1#rebound#set rebound;
             e1#drag#set drag;
+
             e2#under_gravity#set true;
+            e2#rebound#set rebound;
             e2#drag#set drag
           end
           else if is_collision_between_asteroid_and_ovni e1 e2 then begin
             if is_asteroid e1 then begin
               e1#under_gravity#set true;
+              e1#rebound#set rebound;
               e1#drag#set drag
             end
             else if is_asteroid e2 then begin
               e2#under_gravity#set true;
+              e2#rebound#set rebound;
               e2#drag#set drag
             end
           end;
