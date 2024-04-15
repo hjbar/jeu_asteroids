@@ -116,7 +116,7 @@ let init_audio _ =
   Audio.init [
     Laser,      "resources/sounds/laser.mp3";
     Explosion,  "resources/sounds/explosion.mp3";
-    Bonus,      "resources/sounds/laser.mp3";
+    Bonus,      "resources/sounds/bonus.mp3";
     Defeat,     "resources/sounds/laser.mp3";
   ]
 

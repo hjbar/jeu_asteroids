@@ -32,6 +32,11 @@ function init(laser_src, explosion_src, bonus_src, defeat_src) {
     explosion_audio.src = explosion_src;
     bonus_audio.src = bonus_src;
     defeat_audio.src = defeat_src;
+
+    console.log(laser_audio.src);
+    console.log(explosion_audio.src);
+    console.log(bonus_audio.src);
+    console.log(defeat_audio.src);
 }
 
 function play(name, id) {

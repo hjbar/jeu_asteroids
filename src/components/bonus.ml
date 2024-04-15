@@ -11,7 +11,6 @@ type kind_bonus =
   | UpgradeScore
   | DoubleScore
   | Nuke
-  | IncrHp
 
 type bonus_htbl = (kind_bonus, unit -> unit) Hashtbl.t
 
@@ -29,7 +28,6 @@ let bonus_to_timer (bonus : kind_bonus) : Timer.kind_timer =
   | IncreaseNbLasers -> failwith "IncreaseNbLasers has no timer"
   | IncreaseShootSpeed -> failwith "IncreaseShootSpeed has no timer"
   | UpgradeScore -> failwith "UpgradeScore has no timer"
-  | IncrHp -> failwith "IncrHp has no timer"
 
 let add_bonus_list ht l =
   List.iter (fun (kind, f) -> Hashtbl.replace ht kind f) l
@@ -51,11 +49,11 @@ let common_speed_boost =
   let already_boost = ref false in
   fun () ->
     if not !already_boost then begin
-      Global.set_ovni_speed (Global.get_ovni_speed () +. 0.035);
+      Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
       already_boost := true
     end;
     let f () =
-      Global.set_ovni_speed (Global.get_ovni_speed () -. 0.035);
+      Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075);
       already_boost := false
     in
     Timer.add (bonus_to_timer SpeedBoostCommon) 180 f
@@ -74,11 +72,11 @@ let uncommon_speed_boost =
   let already_boost = ref false in
   fun () ->
     if not !already_boost then begin
-      Global.set_ovni_speed (Global.get_ovni_speed () +. 0.035);
+      Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
       already_boost := true
     end;
     let f () =
-      Global.set_ovni_speed (Global.get_ovni_speed () -. 0.035);
+      Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075);
       already_boost := false
     in
     Timer.add (bonus_to_timer SpeedBoostUncommon) 300 f
@@ -130,9 +128,7 @@ let nuke () =
   let f () = Global.no_spawn := false in
   Timer.add (bonus_to_timer Nuke) 1 f
 
-let incr_hp () = Ovni.incr_hp ()
-
-let () = add_bonus_list epic_bonus [ (Nuke, nuke); (IncrHp, incr_hp) ]
+let () = add_bonus_list epic_bonus [ (Nuke, nuke) ]
 
 (* legendary_bonus *)
 
@@ -194,7 +190,5 @@ let get_bonus () =
       (common_bonus, Texture.Asteroid_common)
   in
 
-  Audio.play Bonus;
-
   let f = chose_elt bonus in
-  (f, texture)
+  ((fun () -> Gfx.debug "Bonus\n%!"; Audio.play Bonus; f ()), texture)

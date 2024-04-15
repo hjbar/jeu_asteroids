@@ -159,7 +159,7 @@ class offscreen =
 
     val is_dead = Component.def false
 
-    val remove = Component.def (fun () -> Audio.play Explosion)
+    val remove = Component.def (fun () -> ())
 
     method is_offscreen = is_offscreen
 
@@ -222,7 +222,8 @@ class box_collection (b : bool) =
 
         if is_asteroid then begin
           e#hp#set (e#hp#get - 1);
-          e#is_dead#set (e#hp#get <= 0)
+          e#is_dead#set (e#hp#get <= 0);
+          if e#is_dead#get then Audio.play Explosion
         end
         else e#is_dead#set true;
 
