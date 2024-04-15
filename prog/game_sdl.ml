@@ -1,2 +1,2 @@
 let () =
-  Game.run Game.{ up = "z"; down = "s"; left = "q"; right = "d"; space = " " }
+  Game.run true Game.{ up = "z"; down = "s"; left = "q"; right = "d"; space = " " }

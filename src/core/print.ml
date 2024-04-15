@@ -9,13 +9,13 @@ let print () =
     icon 0 0 32 32 10 10 24 24;
 
   let s =
-    Gfx.render_text ctx (Printf.sprintf "%d" (Ovni.get_hp ())) Global.font
+    Gfx.render_text ctx (Printf.sprintf "%d" (Ovni.get_hp ())) (Option.get !Global.font)
   in
   Gfx.blit ctx (Gfx.get_surface (Global.window ())) s 44 10;
 
   (* score *)
   let s =
-    Gfx.render_text ctx (Printf.sprintf "%.2f" (Scoring.get ())) Global.font
+    Gfx.render_text ctx (Printf.sprintf "%.2f" (Scoring.get ())) (Option.get !Global.font)
   in
   Gfx.blit ctx (Gfx.get_surface (Global.window ())) s 120 10;
 
@@ -29,7 +29,7 @@ let print () =
     Gfx.render_text ctx
       (Printf.sprintf "%.2f/s"
          (float !Laser.nb_lasers *. (60. /. float !Ovni.delay)) )
-      Global.font
+      (Option.get !Global.font)
   in
   Gfx.blit ctx (Gfx.get_surface (Global.window ())) s 44 40;
 
@@ -37,7 +37,7 @@ let print () =
   let s =
     Gfx.render_text ctx
       (Printf.sprintf "Vague numéro : %d" (Scoring.get_wave ()))
-      Global.font
+      (Option.get !Global.font)
   in
   Gfx.blit ctx (Gfx.get_surface (Global.window ())) s 10 70;
 
@@ -62,7 +62,7 @@ let print () =
       (Gfx.get_surface (Global.window ()))
       icon 0 0 32 32 (x - 75) y size size;
     let s =
-      Gfx.render_text ctx (Printf.sprintf "%ds" ((t / 60) + 1)) Global.font
+      Gfx.render_text ctx (Printf.sprintf "%ds" ((t / 60) + 1)) (Option.get !Global.font)
     in
     Gfx.blit ctx (Gfx.get_surface (Global.window ())) s x (y + (size / 4))
   in
@@ -72,8 +72,8 @@ let game_over () =
   let ctx = Gfx.get_context (Global.window ()) in
   Gfx.set_color ctx (Gfx.color 196 26 242 255);
   let txt = "TROP NUL !" in
-  let s = Gfx.render_text ctx txt Global.big_font in
-  let w, h = Gfx.measure_text txt Global.big_font in
+  let s = Gfx.render_text ctx txt (Option.get !Global.big_font) in
+  let w, h = Gfx.measure_text txt (Option.get !Global.big_font) in
   let x = (Global.width - w) / 2 in
   let y = (Global.height - h) / 2 in
   Gfx.blit ctx (Gfx.get_surface (Global.window ())) s x y;

@@ -159,7 +159,7 @@ class offscreen =
 
     val is_dead = Component.def false
 
-    val remove = Component.def (fun () -> ())
+    val remove = Component.def (fun () -> Audio.play Explosion)
 
     method is_offscreen = is_offscreen
 

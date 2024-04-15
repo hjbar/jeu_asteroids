@@ -2,4 +2,4 @@
 
 (library
  (name game)
- (libraries ecs gfx))
+ (libraries ecs gfx audio))

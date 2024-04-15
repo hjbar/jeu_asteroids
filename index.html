@@ -10,7 +10,7 @@
             height: 100vh;
             margin: 0;
             flex-flow: column;
-            overflow:hidden;
+            overflow: hidden;
         }
 
         #game_canvas {
@@ -26,14 +26,14 @@
         #console {
             margin: auto;
             background-color: black;
-            color:white;
+            color: white;
             font-family: monospace;
             white-space: pre;
             overflow: auto;
             width: 800px;
             flex: 1 1;
-            display:flex;
-            padding:1em;
+            display: flex;
+            padding: 1em;
             box-sizing: border-box;
             flex-direction: column-reverse;
         }
@@ -41,9 +41,13 @@
 </head>
 
 <body>
-
+    <button id="laser_button" hidden></button>
+    <button id="explosion_button" hidden></button>
+    <button id="bonus_button" hidden></button>
+    <button id="defeat_button" hidden></button>
     <canvas id="game_canvas" width="800" height="600"></canvas>
     <div id="console"></div>
+    <script type="text/javascript" src="resources/scripts/audio.js"></script>
     <script type="text/javascript" src="prog/game_js.bc.js"></script>
 </body>
 

@@ -1,8 +1,9 @@
+
 (* On crée une fenêtre *)
-let init_window _dt =
+let init_window is_sdl _dt =
   Global.init
     (Format.sprintf "game_canvas:%dx%d:r=presentvsync" Global.width
-       Global.height );
+       Global.height) is_sdl;
   false
 
 (* On crée la config *)
@@ -13,7 +14,7 @@ type config =
   ; right : string
   ; space : string
   }
-
+  
 let has_key, set_key, unset_key =
   let h = Hashtbl.create 16 in
   ( (fun s -> Hashtbl.mem h s)
@@ -24,7 +25,6 @@ let has_key, set_key, unset_key =
 let init dt =
   Init.init_all dt;
   false
-
 (* On update le jeu *)
 let update config dt =
   (* On update les inputs *)
@@ -79,8 +79,16 @@ let chain_functions l =
         true
       end
 
+
+let init_audio _ =
+  Audio.init [
+    Laser,      "resources/sounds/laser.mp3";
+    Explosion,  "resources/sounds/explosion.mp3";
+    Bonus,      "resources/sounds/laser.mp3";
+    Defeat,     "resources/sounds/laser.mp3";
+  ]
+
 (* On lance le jeu *)
-let run config =
-  Gfx.main_loop
-    (chain_functions
-       [ init_window; Texture.load_all; Texture.wait_all; init; update config ] )
+let run is_sdl config =
+  Gfx.main_loop (chain_functions
+       [ init_audio; init_window is_sdl; Texture.load_all; Texture.wait_all; init; update config ] )

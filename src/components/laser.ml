@@ -107,6 +107,8 @@ let create () =
     Entities.lasers#replace l#id#get l
   end;
 
+  Audio.play Laser;
+
   Ovni.has_shot ()
 
 (* Maj les lasers *)

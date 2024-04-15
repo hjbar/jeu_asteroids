@@ -190,5 +190,7 @@ let get_bonus () =
       (common_bonus, Texture.Asteroid_common)
   in
 
+  Audio.play Bonus;
+
   let f = chose_elt bonus in
   (f, texture)

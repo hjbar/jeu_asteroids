@@ -1,0 +1,4 @@
+(library
+ (name audio_sdl)
+ (implements audio)
+ (libraries tsdl tsdl-mixer))
