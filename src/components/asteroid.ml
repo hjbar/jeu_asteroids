@@ -271,7 +271,7 @@ let pattern_6 () =
   let limit = (nb / 2) - (nb / 4) + Random.int (nb / 2) in
   let rand =
     if Random.int 2 = 0 then Random.int limit
-    else limit + Random.int (nb - limit)
+    else limit + 1 + Random.int (nb - limit - 1)
   in
 
   let speed =
