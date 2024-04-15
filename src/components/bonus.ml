@@ -191,4 +191,8 @@ let get_bonus () =
   in
 
   let f = chose_elt bonus in
-  ((fun () -> Gfx.debug "Bonus\n%!"; Audio.play Bonus; f ()), texture)
+  ( (fun () ->
+      Gfx.debug "Bonus\n%!";
+      Audio.play Bonus;
+      f () )
+  , texture )

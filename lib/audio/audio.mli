@@ -1,8 +1,8 @@
 type audio_kind =
-| Laser
-| Explosion
-| Bonus
-| Defeat
+  | Laser
+  | Explosion
+  | Bonus
+  | Defeat
 
 val play : audio_kind -> unit
 

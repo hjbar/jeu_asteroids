@@ -10,13 +10,16 @@ let window, init =
       match !window_r with
       | Some w -> w
       | None -> failwith "Uninitialized window" )
-  , fun str is_sdl->
+  , fun str is_sdl ->
       let w = Gfx.create str in
       window_r := Some w;
       let factor = if is_sdl then 2 else 1 in
-      let font_family = if is_sdl then "resources/fonts/roboto_mono/RobotoMono-Regular.ttf" else "monospace" in
-      font := Some (Gfx.load_font font_family "" (24*factor));
-      big_font := Some (Gfx.load_font font_family "" (256*factor));)
+      let font_family =
+        if is_sdl then "resources/fonts/roboto_mono/RobotoMono-Regular.ttf"
+        else "monospace"
+      in
+      font := Some (Gfx.load_font font_family "" (24 * factor));
+      big_font := Some (Gfx.load_font font_family "" (256 * factor)) )
 
 (* DIMENSION SCREEN *)
 let height = 900

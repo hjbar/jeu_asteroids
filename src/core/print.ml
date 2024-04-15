@@ -9,13 +9,17 @@ let print () =
     icon 0 0 32 32 10 10 24 24;
 
   let s =
-    Gfx.render_text ctx (Printf.sprintf "%d" (Ovni.get_hp ())) (Option.get !Global.font)
+    Gfx.render_text ctx
+      (Printf.sprintf "%d" (Ovni.get_hp ()))
+      (Option.get !Global.font)
   in
   Gfx.blit ctx (Gfx.get_surface (Global.window ())) s 44 10;
 
   (* score *)
   let s =
-    Gfx.render_text ctx (Printf.sprintf "%.2f" (Scoring.get ())) (Option.get !Global.font)
+    Gfx.render_text ctx
+      (Printf.sprintf "%.2f" (Scoring.get ()))
+      (Option.get !Global.font)
   in
   Gfx.blit ctx (Gfx.get_surface (Global.window ())) s 120 10;
 
@@ -62,7 +66,9 @@ let print () =
       (Gfx.get_surface (Global.window ()))
       icon 0 0 32 32 (x - 75) y size size;
     let s =
-      Gfx.render_text ctx (Printf.sprintf "%ds" ((t / 60) + 1)) (Option.get !Global.font)
+      Gfx.render_text ctx
+        (Printf.sprintf "%ds" ((t / 60) + 1))
+        (Option.get !Global.font)
     in
     Gfx.blit ctx (Gfx.get_surface (Global.window ())) s x (y + (size / 4))
   in

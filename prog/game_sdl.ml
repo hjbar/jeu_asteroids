@@ -1,18 +1,17 @@
 let () =
-  Game.run
-    true
+  Game.run true
     Game.
       { up = "z"
       ; down = "s"
       ; left = "q"
       ; right = "d"
-      ; space = " "
-      ; ctrl = "Control"
-      ; enter = "Enter"
-      ; break = "."
-      ; quit = "0"
-      ; un = "1"
-      ; deux = "2"
-      ; quatre = "4"
-      ; cinq = "5"
+      ; space = "space"
+      ; ctrl = "left ctrl"
+      ; enter = "keypad enter"
+      ; break = "keypad ."
+      ; quit = "keypad 0"
+      ; un = "keypad 1"
+      ; deux = "keypad 2"
+      ; quatre = "keypad 4"
+      ; cinq = "keypad 5"
       }
