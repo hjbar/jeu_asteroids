@@ -1,3 +1,6 @@
+(* Game state *)
+let break = ref false
+
 (* On crée une fenêtre *)
 let init_window _dt =
   Global.init
@@ -13,6 +16,8 @@ type config =
   ; right : string
   ; space : string
   ; ctrl : string
+  ; enter : string
+  ; break : string
   ; quit : string
   ; un : string
   ; deux : string
@@ -41,7 +46,14 @@ let update config dt =
     | _ -> ()
   in
 
+  (* On vérifie si on doit mettre le jeu en pause *)
+  if has_key config.ctrl && has_key config.break then break := true;
+
+  if has_key config.ctrl && has_key config.enter then break := false;
+
+  (* On choisit quoi faire selon l'état du jeu *)
   if has_key config.ctrl && has_key config.quit then false
+  else if !break then true
   else begin
     (* On regarde si on doit activer un mode *)
     if has_key config.ctrl && has_key config.un then Global.god_mode := true;
@@ -79,6 +91,7 @@ let update config dt =
     Ecs.System.update_all dt;
     Print.print ();
 
+    (* On vérifie si on doit continuer *)
     if Ovni.is_alive () then true
     else (
       Print.game_over ();
