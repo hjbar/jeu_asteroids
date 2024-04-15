@@ -31,6 +31,8 @@ let ovni_w, ovni_h =
   let factor = 2.5 in
   (int_of_float (19. *. factor), int_of_float (32. *. factor))
 
+let god_mode = ref false
+
 let get_ovni_speed, set_ovni_speed =
   let speed = ref 0.1 in
   ((fun () -> !speed), fun s -> speed := s)
@@ -39,6 +41,12 @@ let get_ovni_speed, set_ovni_speed =
 let asteroid_size = 60
 
 let no_spawn = ref false
+
+let bonus_drop_rate, set_bonus_only, reset_bonus_drop_rate =
+  let drop_rate = ref 5 in
+  ( (fun () -> !drop_rate)
+  , (fun () -> drop_rate := 100)
+  , fun () -> drop_rate := 5 )
 
 (* GRAVITY *)
 let gravity, set_gravity =
