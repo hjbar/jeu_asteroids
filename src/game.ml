@@ -12,6 +12,12 @@ type config =
   ; left : string
   ; right : string
   ; space : string
+  ; ctrl : string
+  ; quit : string
+  ; un : string
+  ; deux : string
+  ; quatre : string
+  ; cinq : string
   }
 
 let has_key, set_key, unset_key =
@@ -35,35 +41,49 @@ let update config dt =
     | _ -> ()
   in
 
-  (* On update les mouvements *)
-  let dx = ref 0. in
-  let dy = ref 0. in
+  if has_key config.ctrl && has_key config.quit then false
+  else begin
+    (* On regarde si on doit activer un mode *)
+    if has_key config.ctrl && has_key config.un then Global.god_mode := true;
 
-  let v = Global.get_ovni_speed () in
+    if has_key config.ctrl && has_key config.quatre then
+      Global.god_mode := false;
 
-  if has_key config.up then dy := !dy -. v;
-  if has_key config.down then dy := !dy +. v;
-  if has_key config.left then dx := !dx -. v;
-  if has_key config.right then dx := !dx +. v;
+    if has_key config.ctrl && has_key config.deux then Global.set_bonus_only ();
 
-  Ovni.set_sum_forces Vector.{ x = !dx; y = !dy };
+    if has_key config.ctrl && has_key config.cinq then
+      Global.reset_bonus_drop_rate ();
 
-  (* On update les lasers *)
-  if has_key config.space && Ovni.allow_to_shoot () then Laser.create ();
+    (* On update les mouvements *)
+    let dx = ref 0. in
+    let dy = ref 0. in
 
-  (* On update le reste du jeu *)
-  Asteroid.remove_old_asteroids ();
-  Laser.remove_old_lasers ();
-  Scoring.update ();
-  Timer.update_all ();
-  Background.update ();
-  Ecs.System.update_all dt;
-  Print.print ();
+    let v = Global.get_ovni_speed () in
 
-  if Ovni.is_alive () then true
-  else (
-    Print.game_over ();
-    false )
+    if has_key config.up then dy := !dy -. v;
+    if has_key config.down then dy := !dy +. v;
+    if has_key config.left then dx := !dx -. v;
+    if has_key config.right then dx := !dx +. v;
+
+    Ovni.set_sum_forces Vector.{ x = !dx; y = !dy };
+
+    (* On update les lasers *)
+    if has_key config.space && Ovni.allow_to_shoot () then Laser.create ();
+
+    (* On update le reste du jeu *)
+    Asteroid.remove_old_asteroids ();
+    Laser.remove_old_lasers ();
+    Scoring.update ();
+    Timer.update_all ();
+    Background.update ();
+    Ecs.System.update_all dt;
+    Print.print ();
+
+    if Ovni.is_alive () then true
+    else (
+      Print.game_over ();
+      false )
+  end
 
 (* Fonction utilitaire pour gérer Gfx.main_loop *)
 let chain_functions l =

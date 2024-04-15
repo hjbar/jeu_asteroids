@@ -3,4 +3,17 @@ let debug = Gfx.open_formatter "console"
 let () = Gfx.set_debug_formatter debug
 
 let () =
-  Game.run Game.{ up = "z"; down = "s"; left = "q"; right = "d"; space = " " }
+  Game.run
+    Game.
+      { up = "z"
+      ; down = "s"
+      ; left = "q"
+      ; right = "d"
+      ; space = " "
+      ; ctrl = "Control"
+      ; quit = "0"
+      ; un = "1"
+      ; deux = "2"
+      ; quatre = "4"
+      ; cinq = "5"
+      }

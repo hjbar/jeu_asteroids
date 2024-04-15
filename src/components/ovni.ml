@@ -11,6 +11,11 @@ let get_x () = (ovni ())#pos#get.x
 
 let get_y () = (ovni ())#pos#get.y
 
+(* To manage ovni's invicibility *)
+let is_invincible () = (ovni ())#invincible#get || !Global.god_mode
+
+let set_invincibility b = (ovni ())#invincible#set b
+
 (* To manage ovni's hp *)
 let get_hp () = (ovni ())#hp#get
 
@@ -19,7 +24,7 @@ let is_alive () = (ovni ())#hp#get > 0
 let incr_hp () = (ovni ())#hp#set ((ovni ())#hp#get + 1)
 
 let decr_hp () =
-  if not (ovni ())#invincible#get then begin
+  if not (is_invincible ()) then begin
     (ovni ())#hp#set ((ovni ())#hp#get - 1);
     (ovni ())#invincible#set true;
     let f () =
@@ -27,11 +32,6 @@ let decr_hp () =
     in
     Timer.add Timer.OvniInvicible 160 f
   end
-
-(* To manage ovni's invicibility *)
-let is_invincible () = (ovni ())#invincible#get
-
-let set_invincibility b = (ovni ())#invincible#set b
 
 (* To manage ovni's shooting *)
 let delay = ref 30
