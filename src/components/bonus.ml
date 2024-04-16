@@ -49,11 +49,11 @@ let common_speed_boost =
   let already_boost = ref false in
   fun () ->
     if not !already_boost then begin
-      Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
+      Global.set_ovni_speed (Global.get_ovni_speed () +. 0.035);
       already_boost := true
     end;
     let f () =
-      Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075);
+      Global.set_ovni_speed (Global.get_ovni_speed () -. 0.035);
       already_boost := false
     in
     Timer.add (bonus_to_timer SpeedBoostCommon) 180 f
@@ -72,11 +72,11 @@ let uncommon_speed_boost =
   let already_boost = ref false in
   fun () ->
     if not !already_boost then begin
-      Global.set_ovni_speed (Global.get_ovni_speed () +. 0.075);
+      Global.set_ovni_speed (Global.get_ovni_speed () +. 0.035);
       already_boost := true
     end;
     let f () =
-      Global.set_ovni_speed (Global.get_ovni_speed () -. 0.075);
+      Global.set_ovni_speed (Global.get_ovni_speed () -. 0.035);
       already_boost := false
     in
     Timer.add (bonus_to_timer SpeedBoostUncommon) 300 f

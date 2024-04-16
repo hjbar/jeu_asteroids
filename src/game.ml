@@ -113,12 +113,13 @@ let chain_functions l =
         true
       end
 
+(* La liste des sons utilisés *)
 let init_audio _ =
   Audio.init
-    [ (Laser, "resources/sounds/laser.mp3")
-    ; (Explosion, "resources/sounds/explosion.mp3")
-    ; (Bonus, "resources/sounds/bonus.mp3")
-    ; (Defeat, "resources/sounds/laser.mp3")
+    [ (Laser, "resources/sounds/laser.wav")
+    ; (Explosion, "resources/sounds/explosion.wav")
+    ; (Bonus, "resources/sounds/bonus.wav")
+    ; (Defeat, "resources/sounds/laser.wav")
     ]
 
 (* On lance le jeu *)
