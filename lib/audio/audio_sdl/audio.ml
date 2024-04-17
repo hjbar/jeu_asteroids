@@ -6,6 +6,8 @@ type audio_kind =
   | Explosion
   | Bonus
   | Defeat
+  | Damage
+  | Bomb
 
 let audio_table = Hashtbl.create 8
 

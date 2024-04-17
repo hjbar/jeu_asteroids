@@ -125,8 +125,12 @@ let nuke () =
     l;
 
   Global.no_spawn := true;
-  let f () = Global.no_spawn := false in
-  Timer.add (bonus_to_timer Nuke) 1 f
+  Ovni.set_invincibility true;
+  let g = Global.gravity () in
+  Global.set_gravity 0.;
+  let f () = Global.no_spawn := false; Ovni.set_invincibility false; Global.set_gravity g in
+  Audio.play Bomb;
+  Timer.add (bonus_to_timer Nuke) 120 f
 
 let () = add_bonus_list epic_bonus [ (Nuke, nuke) ]
 
@@ -175,7 +179,7 @@ let () =
 let get_bonus () =
   let nb = Random.int 100 in
 
-  let bonus, texture =
+  let bonus, texture = 
     if nb < 5 then
       (* 5% legendary *)
       (legendary_bonus, Texture.Asteroid_legendary)

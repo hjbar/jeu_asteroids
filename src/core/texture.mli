@@ -16,8 +16,9 @@ val image_from_surface :
 val anim_from_surface :
   Gfx.context -> Gfx.surface -> int -> int -> int -> int -> int -> int -> t
 
-type kind_texture =
+  type kind_texture =
   | Ovni
+  | Ovni_invincible
   | Asteroid
   | Asteroid_common
   | Asteroid_uncommon
@@ -26,6 +27,7 @@ type kind_texture =
   | Asteroid_legendary
   | Laser
   | Background
+  | Background_bomb
   | Icon_heart
   | Icon_nb_lasers
   | Icon_split_shoot
@@ -33,6 +35,8 @@ type kind_texture =
   | Icon_speed_boost_common
   | Icon_speed_boost_uncommon
   | Icon_speed_boost_rare
+  | Icon_2x
+  | Icon_bomb
 
 val get : kind_texture -> Gfx.surface Gfx.resource
 

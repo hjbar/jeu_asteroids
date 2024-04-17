@@ -3,6 +3,8 @@ type audio_kind =
   | Explosion
   | Bonus
   | Defeat
+  | Damage
+  | Bomb
 
 val play : audio_kind -> unit
 
