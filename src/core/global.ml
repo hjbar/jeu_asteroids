@@ -13,13 +13,13 @@ let window, init =
   , fun str is_sdl ->
       let w = Gfx.create str in
       window_r := Some w;
-      let factor = if is_sdl then 2 else 1 in
+      let factor = if is_sdl then 0.8 else 1. in
       let font_family =
         if is_sdl then "resources/fonts/roboto_mono/RobotoMono-Regular.ttf"
         else "monospace"
       in
-      font := Some (Gfx.load_font font_family "" (24 * factor));
-      big_font := Some (Gfx.load_font font_family "" (256 * factor)) )
+      font := Some (Gfx.load_font font_family "" (int_of_float @@ 24. *. factor));
+      big_font := Some (Gfx.load_font font_family "" (int_of_float @@ 256. *. factor)) )
 
 (* DIMENSION SCREEN *)
 let height = 900

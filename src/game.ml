@@ -120,7 +120,8 @@ let init_audio _ =
     ; (Explosion, "resources/sounds/explosion.wav")
     ; (Bonus, "resources/sounds/bonus.wav")
     ; (Defeat, "resources/sounds/laser.wav")
-    ]
+    ];
+  false
 
 (* On lance le jeu *)
 let run is_sdl config =

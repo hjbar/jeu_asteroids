@@ -15,8 +15,7 @@ let init l =
   List.iter (fun (k, s) -> Hashtbl.replace audio_table k s) l;
   Js.Unsafe.fun_call (Js.Unsafe.js_expr "init")
     (List.map (fun (_, b) -> Js.string b |> Js.Unsafe.inject) l |> Array.of_list)
-  |> ignore;
-  false
+  |> ignore
 
 let play k =
   let js_string = Js.string (Hashtbl.find audio_table k) in

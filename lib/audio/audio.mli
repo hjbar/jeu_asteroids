@@ -6,4 +6,4 @@ type audio_kind =
 
 val play : audio_kind -> unit
 
-val init : (audio_kind * string) list -> bool
+val init : (audio_kind * string) list -> unit

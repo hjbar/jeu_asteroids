@@ -72,10 +72,11 @@ let print () =
     in
     Gfx.blit ctx (Gfx.get_surface (Global.window ())) s x (y + (size / 4))
   in
-  List.iteri (fun i v -> f i v) (Timer.active_bonuses ())
+  List.iteri (fun i v -> f i v) (Timer.active_bonuses ());
+  Gfx.commit ctx
 
-let game_over () =
-  let ctx = Gfx.get_context (Global.window ()) in
+let game_over () = ()
+  (* let ctx = Gfx.get_context (Global.window ()) in
   Gfx.set_color ctx (Gfx.color 196 26 242 255);
   let txt = "TROP NUL !" in
   let s = Gfx.render_text ctx txt (Option.get !Global.big_font) in
@@ -83,4 +84,4 @@ let game_over () =
   let x = (Global.width - w) / 2 in
   let y = (Global.height - h) / 2 in
   Gfx.blit ctx (Gfx.get_surface (Global.window ())) s x y;
-  Gfx.commit ctx
+  Gfx.commit ctx *)
