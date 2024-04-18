@@ -54,7 +54,6 @@ let init_bg () =
   let bg = new drawable in
 
   bg#pos#set Vector.{ x = 0.; y = float (-3 * Global.height) };
-
   bg#rect#set Rect.{ width = Global.width; height = 4 * Global.height };
 
   let ctx = Gfx.get_context (Global.window ()) in
@@ -65,12 +64,27 @@ let init_bg () =
 
   Entities.background := Some bg
 
+let init_nuclear_bg () =
+  let bg = new drawable in
+
+  bg#pos#set Vector.{ x = 0.; y = 0. };
+  bg#rect#set Rect.{ width = Global.width; height = Global.height };
+
+  let ctx = Gfx.get_context (Global.window ()) in
+  let surface = Gfx.get_resource (Texture.get Background_bomb) in
+  bg#texture#set
+    (Texture.image_from_surface ctx surface 0 0 626 417 Global.width
+       Global.height );
+
+  Entities.nuclear_background := Some bg
+
 let init_all dt =
   Random.self_init ();
 
   init_walls Global.wall_l;
   init_ovni (Global.width / 2) (3 * Global.height / 4);
   init_bg ();
+  init_nuclear_bg ();
   Asteroid.init_asteroids ();
 
   Ecs.System.init_all dt

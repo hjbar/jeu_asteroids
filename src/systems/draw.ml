@@ -34,22 +34,19 @@ let update _dt el =
   let window = Global.window () in
   let ctx = Gfx.get_context window in
   let win_surf = Gfx.get_surface window in
-  (* let ww, wh = Gfx.get_context_logical_size ctx in
-     Gfx.set_color ctx background;
-        Gfx.fill_rect ctx win_surf 0 0 ww wh; *)
+
   begin
-    match !Entities.background with None -> () | Some b -> draw ctx win_surf b
+    match !Entities.background with
+    | None -> failwith "background not init"
+    | Some b -> draw ctx win_surf b
   end;
+
   Seq.iter (draw ctx win_surf) el;
+
   if !Global.no_spawn then begin
-    let d = new drawable in
-    d#pos#set Vector.{ x = 0.; y = 0. };
-    d#rect#set Rect.{ width = Global.width; height = Global.height };
-    let surface = Gfx.get_resource (Texture.get Background_bomb) in
-    d#texture#set
-      (Texture.image_from_surface ctx surface 0 0 626 417 Global.width
-         Global.height );
-    draw ctx win_surf d
+    match !Entities.nuclear_background with
+    | None -> failwith "nuclear_background not init"
+    | Some b -> draw ctx win_surf b
   end;
 
   Gfx.commit ctx
