@@ -43,7 +43,6 @@ let init_ovni x y =
 
     Collision_system.register (ovni :> box);
     Forces_system.register (ovni :> collidable);
-    Draw_system.register (ovni :> drawable);
     Move_system.register (ovni :> movable);
 
     ovni

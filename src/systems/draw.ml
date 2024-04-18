@@ -43,6 +43,12 @@ let update _dt el =
 
   Seq.iter (draw ctx win_surf) el;
 
+  begin
+    match !Entities.ovni with
+    | None -> failwith "ovni not init"
+    | Some b -> draw ctx win_surf (b :> drawable)
+  end;
+
   if !Global.no_spawn then begin
     match !Entities.nuclear_background with
     | None -> failwith "nuclear_background not init"
