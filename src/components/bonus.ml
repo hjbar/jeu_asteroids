@@ -134,7 +134,7 @@ let nuke () =
   let f () =
     Global.no_spawn := false;
     Ovni.set_invincibility false;
-    Ovni.set_under_gravity true
+    Ovni.set_under_gravity (not (Scoring.mk_star ()))
   in
   Audio.play Bomb;
   Timer.add (bonus_to_timer Nuke) 120 f
