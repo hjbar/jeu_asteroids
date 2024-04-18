@@ -137,7 +137,7 @@ let nuke () =
     Ovni.set_under_gravity (not (Scoring.mk_star ()))
   in
   Audio.play Bomb;
-  Timer.add (bonus_to_timer Nuke) 120 f
+  Timer.add (bonus_to_timer Nuke) 100 f
 
 let () = add_bonus_list epic_bonus [ (IncrHp, incr_hp); (Nuke, nuke) ]
 
