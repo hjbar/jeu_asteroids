@@ -3,6 +3,8 @@ val set_sum_forces : Vector.t -> unit
 
 val set_under_gravity : bool -> unit
 
+val set_drag : float -> unit
+
 (* Getter of position *)
 val get_x : unit -> float
 

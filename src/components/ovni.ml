@@ -6,6 +6,8 @@ let set_sum_forces v = (ovni ())#sum_forces#set v
 
 let set_under_gravity b = (ovni ())#under_gravity#set b
 
+let set_drag d = (ovni ())#drag#set d
+
 (* Getter of position *)
 let get_x () = (ovni ())#pos#get.x
 
