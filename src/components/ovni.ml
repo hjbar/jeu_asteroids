@@ -17,10 +17,15 @@ let is_invincible () = (ovni ())#invincible#get || !Global.god_mode
 let set_invincibility b =
   (ovni ())#invincible#set b;
   let ctx = Gfx.get_context (Global.window ()) in
-  let surface = Gfx.get_resource (Texture.get (if b then if Scoring.mk_star () then Ovni_star else Ovni_invincible else Ovni)) in
+  let surface =
+    Gfx.get_resource
+      (Texture.get
+         ( if b then if Scoring.mk_star () then Ovni_star else Ovni_invincible
+           else Ovni ) )
+  in
   (ovni ())#texture#set
-      (Texture.anim_from_surface ctx surface 6 19 32 Global.ovni_w Global.ovni_h
-         10 )
+    (Texture.anim_from_surface ctx surface 6 19 32 Global.ovni_w Global.ovni_h
+       10 )
 
 (* To manage ovni's hp *)
 let get_hp () = (ovni ())#hp#get
@@ -33,9 +38,7 @@ let decr_hp () =
   if not (is_invincible ()) then begin
     (ovni ())#hp#set ((ovni ())#hp#get - 1);
     set_invincibility true;
-    let f () =
-      if not (Scoring.mk_star ()) then set_invincibility false
-    in
+    let f () = if not (Scoring.mk_star ()) then set_invincibility false in
     Audio.play Damage;
     Timer.add Timer.OvniInvicible 160 f
   end

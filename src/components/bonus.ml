@@ -127,7 +127,11 @@ let nuke () =
   Global.no_spawn := true;
   Ovni.set_invincibility true;
   Ovni.set_under_gravity false;
-  let f () = Global.no_spawn := false; Ovni.set_invincibility false; Ovni.set_under_gravity true in
+  let f () =
+    Global.no_spawn := false;
+    Ovni.set_invincibility false;
+    Ovni.set_under_gravity true
+  in
   Audio.play Bomb;
   Timer.add (bonus_to_timer Nuke) 120 f
 
@@ -157,15 +161,15 @@ let mario_kart_star () =
     Ovni.set_under_gravity false;
     Ovni.set_invincibility true;
     Global.put_gravity ();
-    Hashtbl.iter (fun _ v -> v#under_gravity#set true) (Entities.asteroids#table)
+    Hashtbl.iter (fun _ v -> v#under_gravity#set true) Entities.asteroids#table
   end;
-  
+
   let f () =
     Scoring.reset_mk_star ();
     Ovni.set_under_gravity true;
     Ovni.set_invincibility false;
     Global.remove_gravity ();
-    Hashtbl.iter (fun _ v -> v#under_gravity#set false) (Entities.asteroids#table)
+    Hashtbl.iter (fun _ v -> v#under_gravity#set false) Entities.asteroids#table
   in
 
   Timer.add (bonus_to_timer MarioKartStar) 600 f
@@ -173,8 +177,9 @@ let mario_kart_star () =
 let () =
   add_bonus_list legendary_bonus
     [ (* (IncreaseNbLasers, increase_nb_lasers)
-    ; (IncreaseShootSpeed, increase_shoot_speed)
-    ;*) (MarioKartStar, mario_kart_star)
+         ; (IncreaseShootSpeed, increase_shoot_speed)
+         ;*)
+      (MarioKartStar, mario_kart_star)
     ]
 
 (* get_bonus *)
@@ -182,8 +187,8 @@ let () =
 let get_bonus () =
   let nb = Random.int 100 in
 
-  let bonus, texture = 
-    if nb < 100 then
+  let bonus, texture =
+    if nb < 5 then
       (* 5% legendary *)
       (legendary_bonus, Texture.Asteroid_legendary)
     else if nb < 15 then (* 10% epic *)

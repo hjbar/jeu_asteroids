@@ -60,8 +60,10 @@ let load_all _dt =
   let ctx = Gfx.get_context (Global.window ()) in
 
   Hashtbl.replace textures Ovni (Gfx.load_image ctx "resources/anims/fusee.png");
-  Hashtbl.replace textures Ovni_invincible (Gfx.load_image ctx "resources/anims/fusee_invincible.png");
-  Hashtbl.replace textures Ovni_star (Gfx.load_image ctx "resources/anims/fusee_star.png");
+  Hashtbl.replace textures Ovni_invincible
+    (Gfx.load_image ctx "resources/anims/fusee_invincible.png");
+  Hashtbl.replace textures Ovni_star
+    (Gfx.load_image ctx "resources/anims/fusee_star.png");
 
   Hashtbl.replace textures Asteroid
     (Gfx.load_image ctx "resources/images/asteroid.png");
@@ -98,10 +100,10 @@ let load_all _dt =
     (Gfx.load_image ctx "resources/images/icon_speed_uncommon.png");
   Hashtbl.replace textures Icon_speed_boost_rare
     (Gfx.load_image ctx "resources/images/icon_speed_rare.png");
-    Hashtbl.replace textures Icon_2x
-      (Gfx.load_image ctx "resources/images/icon_2x.png");
-      Hashtbl.replace textures Icon_bomb
-        (Gfx.load_image ctx "resources/images/icon_bomb.png");
+  Hashtbl.replace textures Icon_2x
+    (Gfx.load_image ctx "resources/images/icon_2x.png");
+  Hashtbl.replace textures Icon_bomb
+    (Gfx.load_image ctx "resources/images/icon_bomb.png");
 
   false
 

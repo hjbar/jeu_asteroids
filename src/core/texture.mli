@@ -16,7 +16,7 @@ val image_from_surface :
 val anim_from_surface :
   Gfx.context -> Gfx.surface -> int -> int -> int -> int -> int -> int -> t
 
-  type kind_texture =
+type kind_texture =
   | Ovni
   | Ovni_invincible
   | Ovni_star

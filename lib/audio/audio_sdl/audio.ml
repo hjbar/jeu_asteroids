@@ -33,11 +33,13 @@ let init l =
         in
         Hashtbl.replace audio_table k audio
       in
-      List.iter load l;
-    end
+      List.iter load l
+  end
 
 let play k =
   let chunk = Hashtbl.find audio_table k in
   match Mixer.play_channel (-1) chunk 0 with
-  | Error (`Msg e) -> Sdl.log "Play_channel error: %s" e; exit 1
+  | Error (`Msg e) ->
+    Sdl.log "Play_channel error: %s" e;
+    exit 1
   | Ok v -> ()

@@ -18,8 +18,11 @@ let window, init =
         if is_sdl then "resources/fonts/roboto_mono/RobotoMono-Regular.ttf"
         else "monospace"
       in
-      font := Some (Gfx.load_font font_family "" (int_of_float @@ 24. *. factor));
-      big_font := Some (Gfx.load_font font_family "" (int_of_float @@ 256. *. factor)) )
+      font :=
+        Some (Gfx.load_font font_family "" (int_of_float @@ (24. *. factor)));
+      big_font :=
+        Some (Gfx.load_font font_family "" (int_of_float @@ (256. *. factor)))
+  )
 
 (* DIMENSION SCREEN *)
 let height = 900
@@ -59,4 +62,6 @@ let gravity, set_gravity =
 (* UNDER GRAVITY *)
 let is_ast_under_gravity, put_gravity, remove_gravity =
   let levels = [| true; true; false |] in
-  ((fun lvl -> levels.(lvl)), (fun () -> levels.(2) <- true), (fun () -> levels.(2) <- false))
+  ( (fun lvl -> levels.(lvl))
+  , (fun () -> levels.(2) <- true)
+  , fun () -> levels.(2) <- false )

@@ -9,7 +9,13 @@ type audio_kind =
   | Bomb
 
 let int_of_type t =
-  match t with Laser -> 0 | Explosion -> 1 | Bonus -> 2 | Defeat -> 3 | Damage -> 4 | Bomb -> 5
+  match t with
+  | Laser -> 0
+  | Explosion -> 1
+  | Bonus -> 2
+  | Defeat -> 3
+  | Damage -> 4
+  | Bomb -> 5
 
 let init l =
   Js.Unsafe.fun_call (Js.Unsafe.js_expr "init")
