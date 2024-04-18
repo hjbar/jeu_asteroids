@@ -29,8 +29,12 @@ let update config dt =
   if not_break config then Global.break := false;
 
   (* On choisit quoi faire selon l'état du jeu *)
-  if is_quit config then (Print.game_over (); false)
-  else if !Global.break then (Print.print (); true)
+  if is_quit config then (
+    Print.game_over ();
+    false )
+  else if !Global.break then (
+    Print.print ();
+    true )
   else begin
     (* On update le jeu *)
     Keys.update config;

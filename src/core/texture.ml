@@ -89,8 +89,8 @@ let load_all _dt =
     (Gfx.load_image ctx "resources/images/background.png");
   Hashtbl.replace textures Background_bomb
     (Gfx.load_image ctx "resources/images/background_bomb.png");
-    Hashtbl.replace textures Final_screen
-      (Gfx.load_image ctx "resources/images/final_screen.png");
+  Hashtbl.replace textures Final_screen
+    (Gfx.load_image ctx "resources/images/final_screen.png");
 
   Hashtbl.replace textures Icon_heart
     (Gfx.load_image ctx "resources/images/icon_heart.png");

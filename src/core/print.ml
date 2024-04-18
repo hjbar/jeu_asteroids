@@ -82,39 +82,39 @@ let print () =
     let y = Global.height - 10 - size in
     Gfx.blit_full ctx
       (Gfx.get_surface (Global.window ()))
-      icon 0 0 32 32 x y size size;
+      icon 0 0 32 32 x y size size
   end;
 
   (* GOD MODE *)
   if !Global.god_mode then begin
     let icon = Gfx.get_resource (Texture.get Icon_god_mode) in
     let x = Global.width - 10 - size in
-    let y = Global.height - 2*10 - 2*size in
+    let y = Global.height - (2 * 10) - (2 * size) in
     Gfx.blit_full ctx
       (Gfx.get_surface (Global.window ()))
-      icon 0 0 32 32 x y size size;
+      icon 0 0 32 32 x y size size
   end;
-  
+
   (* FULL BONUS *)
   if Global.bonus_drop_rate () = 100 then begin
     let icon = Gfx.get_resource (Texture.get Icon_background) in
     let x = Global.width - 10 - size in
-    let y = Global.height - 3*10 - 3*size in
+    let y = Global.height - (3 * 10) - (3 * size) in
     Gfx.blit_full ctx
       (Gfx.get_surface (Global.window ()))
       icon 0 0 32 32 x y size size;
     let icon = Gfx.get_resource (Texture.get Asteroid_rare) in
     Gfx.blit_full ctx
       (Gfx.get_surface (Global.window ()))
-      icon 0 0 32 32 (x+4) (y+8) (size-18) (size-18);
+      icon 0 0 32 32 (x + 4) (y + 8) (size - 18) (size - 18);
     let icon = Gfx.get_resource (Texture.get Asteroid_epic) in
     Gfx.blit_full ctx
       (Gfx.get_surface (Global.window ()))
-      icon 0 0 32 32 (x+8) (y+8) (size-18) (size-18);
+      icon 0 0 32 32 (x + 8) (y + 8) (size - 18) (size - 18);
     let icon = Gfx.get_resource (Texture.get Asteroid_legendary) in
     Gfx.blit_full ctx
       (Gfx.get_surface (Global.window ()))
-      icon 0 0 32 32 (x+12) (y+8) (size-18) (size-18);
+      icon 0 0 32 32 (x + 12) (y + 8) (size - 18) (size - 18)
   end;
   Gfx.commit ctx
 
@@ -122,5 +122,7 @@ let game_over () =
   Audio.play Defeat;
   let img = Gfx.get_resource (Texture.get Final_screen) in
   let ctx = Gfx.get_context (Global.window ()) in
-  Gfx.blit_full ctx (Gfx.get_surface (Global.window ())) img 0 0 2048 1024 0 0 Global.width Global.height;
+  Gfx.blit_full ctx
+    (Gfx.get_surface (Global.window ()))
+    img 0 0 2048 1024 0 0 Global.width Global.height;
   Gfx.commit ctx
