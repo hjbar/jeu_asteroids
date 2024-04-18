@@ -128,14 +128,19 @@ let nuke () =
       value#is_offscreen#set true )
     l;
 
-  Global.no_spawn := true;
+  Ovni.set_sum_forces Vector.{ x = 0.; y = 0. };
+  Ovni.set_drag 1.;
   Ovni.set_invincibility true;
   Ovni.set_under_gravity false;
+  Global.no_spawn := true;
+
   let f () =
-    Global.no_spawn := false;
+    Ovni.set_drag Global.ovni_drag;
     Ovni.set_invincibility false;
-    Ovni.set_under_gravity (not (Scoring.mk_star ()))
+    Ovni.set_under_gravity (not (Scoring.mk_star ()));
+    Global.no_spawn := false
   in
+
   Audio.play Bomb;
   Timer.add (bonus_to_timer Nuke) 100 f
 

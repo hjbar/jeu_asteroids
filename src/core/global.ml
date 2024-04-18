@@ -37,6 +37,8 @@ let ovni_w, ovni_h =
   let factor = 2.5 in
   (int_of_float (19. *. factor), int_of_float (32. *. factor))
 
+let ovni_drag = 0.02
+
 let god_mode = ref false
 
 let get_ovni_speed, set_ovni_speed =

@@ -26,7 +26,7 @@ let init_ovni x y =
     ovni#pos#set Vector.{ x = float x; y = float y };
     ovni#rect#set Rect.{ width = Global.ovni_w; height = Global.ovni_h };
     ovni#mass#set 100.;
-    ovni#drag#set 0.02;
+    ovni#drag#set Global.ovni_drag;
     ovni#under_gravity#set true;
     ovni#rebound#set 0.;
     ovni#object_type#set Ovni;
