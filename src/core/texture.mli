@@ -19,6 +19,7 @@ val anim_from_surface :
   type kind_texture =
   | Ovni
   | Ovni_invincible
+  | Ovni_star
   | Asteroid
   | Asteroid_common
   | Asteroid_uncommon

@@ -16,16 +16,9 @@ let is_invincible () = (ovni ())#invincible#get || !Global.god_mode
 
 let set_invincibility b =
   (ovni ())#invincible#set b;
-  if b then
-    let ctx = Gfx.get_context (Global.window ()) in
-    let surface = Gfx.get_resource (Texture.get Ovni_invincible) in
-    (ovni ())#texture#set
-      (Texture.anim_from_surface ctx surface 6 19 32 Global.ovni_w Global.ovni_h
-         10 )
-  else
-    let ctx = Gfx.get_context (Global.window ()) in
-    let surface = Gfx.get_resource (Texture.get Ovni) in
-    (ovni ())#texture#set
+  let ctx = Gfx.get_context (Global.window ()) in
+  let surface = Gfx.get_resource (Texture.get (if b then if Scoring.mk_star () then Ovni_star else Ovni_invincible else Ovni)) in
+  (ovni ())#texture#set
       (Texture.anim_from_surface ctx surface 6 19 32 Global.ovni_w Global.ovni_h
          10 )
 

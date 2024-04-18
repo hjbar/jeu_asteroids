@@ -75,7 +75,8 @@ let print () =
   List.iteri (fun i v -> f i v) (Timer.active_bonuses ());
   Gfx.commit ctx
 
-let game_over () = 
+let game_over () =
+  Audio.play Defeat;
   let ctx = Gfx.get_context (Global.window ()) in
   Gfx.set_color ctx (Gfx.color 196 26 242 255);
   let txt = "TROP NUL !" in

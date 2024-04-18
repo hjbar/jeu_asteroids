@@ -55,3 +55,8 @@ let bonus_drop_rate, set_bonus_only, reset_bonus_drop_rate =
 let gravity, set_gravity =
   let gravity_r = ref 0.015 in
   ((fun () -> !gravity_r), fun v -> gravity_r := v)
+
+(* UNDER GRAVITY *)
+let is_ast_under_gravity, put_gravity, remove_gravity =
+  let levels = [| true; true; false |] in
+  ((fun lvl -> levels.(lvl)), (fun () -> levels.(2) <- true), (fun () -> levels.(2) <- false))

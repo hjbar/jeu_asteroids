@@ -31,6 +31,7 @@ let anim_from_surface ctx surface n w h dw dh frame_duration =
 type kind_texture =
   | Ovni
   | Ovni_invincible
+  | Ovni_star
   | Asteroid
   | Asteroid_common
   | Asteroid_uncommon
@@ -60,6 +61,7 @@ let load_all _dt =
 
   Hashtbl.replace textures Ovni (Gfx.load_image ctx "resources/anims/fusee.png");
   Hashtbl.replace textures Ovni_invincible (Gfx.load_image ctx "resources/anims/fusee_invincible.png");
+  Hashtbl.replace textures Ovni_star (Gfx.load_image ctx "resources/anims/fusee_star.png");
 
   Hashtbl.replace textures Asteroid
     (Gfx.load_image ctx "resources/images/asteroid.png");

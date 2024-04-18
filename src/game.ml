@@ -119,7 +119,7 @@ let init_audio _ =
     [ (Laser, "resources/sounds/laser.wav")
     ; (Explosion, "resources/sounds/explosion.wav")
     ; (Bonus, "resources/sounds/bonus.wav")
-    ; (Defeat, "resources/sounds/laser.wav")
+    ; (Defeat, "resources/sounds/loose.wav")
     ; (Damage, "resources/sounds/damage.wav")
     ; (Bomb, "resources/sounds/bomb.wav")
     ];

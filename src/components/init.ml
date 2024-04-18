@@ -53,14 +53,14 @@ let init_ovni x y =
 let init_bg () =
   let bg = new drawable in
 
-  bg#pos#set Vector.{ x = 0.; y = float (-Global.height) };
+  bg#pos#set Vector.{ x = 0.; y = float (-3 * Global.height) };
 
-  bg#rect#set Rect.{ width = Global.width; height = 2 * Global.height };
+  bg#rect#set Rect.{ width = Global.width; height = 4 * Global.height };
 
   let ctx = Gfx.get_context (Global.window ()) in
   let surface = Gfx.get_resource (Texture.get Background) in
   bg#texture#set
-    (Texture.image_from_surface ctx surface 0 0 2048 2048 Global.width
+    (Texture.image_from_surface ctx surface 0 0 2048 4096 Global.width
        Global.height );
 
   Entities.background := Some bg

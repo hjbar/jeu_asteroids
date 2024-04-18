@@ -35,7 +35,7 @@ let rec create_asteroid x y id level =
   ast#hp#set [| 1; 2; 4 |].(level);
   ast#level#set level;
 
-  ast#under_gravity#set [| true; true; false |].(level);
+  ast#under_gravity#set (Global.is_ast_under_gravity level);
 
   ast#remove#set (fun () ->
       f ();
