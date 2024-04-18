@@ -1,8 +1,5 @@
 open Keys
 
-(* Game state *)
-let break = ref false
-
 (* On crée une fenêtre *)
 let init_window is_sdl _dt =
   Global.init
@@ -27,13 +24,13 @@ let update config dt =
   in
 
   (* On vérifie si on doit mettre le jeu en pause *)
-  if is_break config then break := true;
+  if is_break config then Global.break := true;
 
-  if not_break config then break := false;
+  if not_break config then Global.break := false;
 
   (* On choisit quoi faire selon l'état du jeu *)
-  if is_quit config then false
-  else if !break then true
+  if is_quit config then (Print.game_over (); false)
+  else if !Global.break then (Print.print (); true)
   else begin
     (* On update le jeu *)
     Keys.update config;

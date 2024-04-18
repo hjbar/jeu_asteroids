@@ -50,6 +50,10 @@ type kind_texture =
   | Icon_speed_boost_rare
   | Icon_2x
   | Icon_bomb
+  | Icon_pause
+  | Icon_god_mode
+  | Icon_background
+  | Final_screen
 
 let textures = Hashtbl.create 16
 
@@ -85,6 +89,8 @@ let load_all _dt =
     (Gfx.load_image ctx "resources/images/background.png");
   Hashtbl.replace textures Background_bomb
     (Gfx.load_image ctx "resources/images/background_bomb.png");
+    Hashtbl.replace textures Final_screen
+      (Gfx.load_image ctx "resources/images/final_screen.png");
 
   Hashtbl.replace textures Icon_heart
     (Gfx.load_image ctx "resources/images/icon_heart.png");
@@ -104,6 +110,12 @@ let load_all _dt =
     (Gfx.load_image ctx "resources/images/icon_2x.png");
   Hashtbl.replace textures Icon_bomb
     (Gfx.load_image ctx "resources/images/icon_bomb.png");
+  Hashtbl.replace textures Icon_god_mode
+    (Gfx.load_image ctx "resources/images/icon_god_mode.png");
+  Hashtbl.replace textures Icon_pause
+    (Gfx.load_image ctx "resources/images/icon_pause.png");
+  Hashtbl.replace textures Icon_background
+    (Gfx.load_image ctx "resources/images/icon_bg.png");
 
   false
 

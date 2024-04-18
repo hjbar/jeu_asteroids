@@ -65,3 +65,6 @@ let is_ast_under_gravity, put_gravity, remove_gravity =
   ( (fun lvl -> levels.(lvl))
   , (fun () -> levels.(2) <- true)
   , fun () -> levels.(2) <- false )
+
+(* Game state *)
+let break = ref false

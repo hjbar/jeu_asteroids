@@ -38,6 +38,10 @@ type kind_texture =
   | Icon_speed_boost_rare
   | Icon_2x
   | Icon_bomb
+  | Icon_pause
+  | Icon_god_mode
+  | Icon_background
+  | Final_screen
 
 val get : kind_texture -> Gfx.surface Gfx.resource
 
