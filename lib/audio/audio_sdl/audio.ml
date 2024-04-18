@@ -22,7 +22,7 @@ let init l =
       Sdl.log "Open_audio error: %s" e;
       exit 1
     | Ok () ->
-      ignore @@ Mixer.allocate_channels 3;
+      ignore @@ Mixer.allocate_channels 6;
       let load (k, s) =
         let audio =
           match Mixer.load_wav s with
