@@ -13,7 +13,7 @@ Lancer le jeu avec Javascript (conseillé) :
 <br>
 Ouvrir un terminal à la racine du projet, puis lancer la commande : python3 -m http.server
 <br>
-Ouvrir un navigateur et aller à l'adresse : http://localhost:8000/
+Ouvrir un navigateur et aller à l'adresse : http://localhost:8000
 <br>
 <br>
 Lancer le jeu version SDL : make exec

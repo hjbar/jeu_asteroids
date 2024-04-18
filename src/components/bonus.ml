@@ -11,6 +11,7 @@ type kind_bonus =
   | UpgradeScore
   | DoubleScore
   | Nuke
+  | IncrHp
 
 type bonus_htbl = (kind_bonus, unit -> unit) Hashtbl.t
 
@@ -28,6 +29,7 @@ let bonus_to_timer (bonus : kind_bonus) : Timer.kind_timer =
   | IncreaseNbLasers -> failwith "IncreaseNbLasers has no timer"
   | IncreaseShootSpeed -> failwith "IncreaseShootSpeed has no timer"
   | UpgradeScore -> failwith "UpgradeScore has no timer"
+  | IncrHp -> failwith "IncrHp has no timer"
 
 let add_bonus_list ht l =
   List.iter (fun (kind, f) -> Hashtbl.replace ht kind f) l
@@ -110,6 +112,8 @@ let () =
 
 (* epic_bonus *)
 
+let incr_hp () = Ovni.incr_hp ()
+
 let epic_bonus : bonus_htbl = Hashtbl.create 16
 
 let nuke () =
@@ -135,7 +139,7 @@ let nuke () =
   Audio.play Bomb;
   Timer.add (bonus_to_timer Nuke) 120 f
 
-let () = add_bonus_list epic_bonus [ (Nuke, nuke) ]
+let () = add_bonus_list epic_bonus [ (IncrHp, incr_hp); (Nuke, nuke) ]
 
 (* legendary_bonus *)
 
@@ -176,10 +180,9 @@ let mario_kart_star () =
 
 let () =
   add_bonus_list legendary_bonus
-    [ (* (IncreaseNbLasers, increase_nb_lasers)
-         ; (IncreaseShootSpeed, increase_shoot_speed)
-         ;*)
-      (MarioKartStar, mario_kart_star)
+    [ (IncreaseNbLasers, increase_nb_lasers)
+    ; (IncreaseShootSpeed, increase_shoot_speed)
+    ; (MarioKartStar, mario_kart_star)
     ]
 
 (* get_bonus *)
@@ -204,7 +207,6 @@ let get_bonus () =
 
   let f = chose_elt bonus in
   ( (fun () ->
-      Gfx.debug "Bonus\n%!";
       Audio.play Bonus;
       f () )
   , texture )
