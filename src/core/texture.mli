@@ -42,6 +42,7 @@ type kind_texture =
   | Icon_god_mode
   | Icon_background
   | Final_screen
+  | Pause_screen
 
 val get : kind_texture -> Gfx.surface Gfx.resource
 

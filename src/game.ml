@@ -30,7 +30,7 @@ let update config dt =
 
   (* On choisit quoi faire selon l'état du jeu *)
   if is_quit config then (Print.game_over (); false)
-  else if !Global.break then (Print.print (); true)
+  else if !Global.break then (Print.pause_screen (); true)
   else begin
     (* On update le jeu *)
     Keys.update config;

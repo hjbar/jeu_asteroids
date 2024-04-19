@@ -54,6 +54,7 @@ type kind_texture =
   | Icon_god_mode
   | Icon_background
   | Final_screen
+  | Pause_screen
 
 let textures = Hashtbl.create 16
 
@@ -91,6 +92,8 @@ let load_all _dt =
     (Gfx.load_image ctx "resources/images/background_bomb.png");
     Hashtbl.replace textures Final_screen
       (Gfx.load_image ctx "resources/images/final_screen.png");
+      Hashtbl.replace textures Pause_screen
+        (Gfx.load_image ctx "resources/images/pause_screen.png");
 
   Hashtbl.replace textures Icon_heart
     (Gfx.load_image ctx "resources/images/icon_heart.png");

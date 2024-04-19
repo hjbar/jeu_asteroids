@@ -21,7 +21,7 @@ let window, init =
       font :=
         Some (Gfx.load_font font_family "" (int_of_float @@ (24. *. factor)));
       big_font :=
-        Some (Gfx.load_font font_family "" (int_of_float @@ (256. *. factor)))
+        Some (Gfx.load_font font_family "" (int_of_float @@ (64. *. factor)))
   )
 
 (* DIMENSION SCREEN *)
