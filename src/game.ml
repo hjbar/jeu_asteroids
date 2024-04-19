@@ -29,8 +29,14 @@ let update config dt =
   if not_break config then Global.break := false;
 
   (* On choisit quoi faire selon l'état du jeu *)
-  if is_quit config then (Print.game_over (); false)
-  else if !Global.break then (Print.pause_screen (); true)
+  if is_quit config then begin
+    Print.game_over ();
+    false
+  end
+  else if !Global.break then begin
+    Print.pause_screen ();
+    true
+  end
   else begin
     (* On update le jeu *)
     Keys.update config;
@@ -44,9 +50,10 @@ let update config dt =
 
     (* On vérifie si on doit continuer *)
     if Ovni.is_alive () then true
-    else (
+    else begin
       Print.game_over ();
-      false )
+      false
+    end
   end
 
 (* Fonction utilitaire pour gérer Gfx.main_loop *)

@@ -82,9 +82,9 @@ let print () =
     let y = Global.height - 10 - size in
     Gfx.blit_full ctx
       (Gfx.get_surface (Global.window ()))
-      icon 0 0 32 32 x y size size;
+      icon 0 0 32 32 x y size size
   end;
-  
+
   (* FULL BONUS *)
   if Global.bonus_drop_rate () = 100 then begin
     let icon = Gfx.get_resource (Texture.get Icon_background) in
@@ -96,15 +96,15 @@ let print () =
     let icon = Gfx.get_resource (Texture.get Asteroid_rare) in
     Gfx.blit_full ctx
       (Gfx.get_surface (Global.window ()))
-      icon 0 0 32 32 (x+4) (y+8) (size-18) (size-18);
+      icon 0 0 32 32 (x + 4) (y + 8) (size - 18) (size - 18);
     let icon = Gfx.get_resource (Texture.get Asteroid_epic) in
     Gfx.blit_full ctx
       (Gfx.get_surface (Global.window ()))
-      icon 0 0 32 32 (x+8) (y+8) (size-18) (size-18);
+      icon 0 0 32 32 (x + 8) (y + 8) (size - 18) (size - 18);
     let icon = Gfx.get_resource (Texture.get Asteroid_legendary) in
     Gfx.blit_full ctx
       (Gfx.get_surface (Global.window ()))
-      icon 0 0 32 32 (x+12) (y+8) (size-18) (size-18);
+      icon 0 0 32 32 (x + 12) (y + 8) (size - 18) (size - 18)
   end;
   Gfx.commit ctx
 
