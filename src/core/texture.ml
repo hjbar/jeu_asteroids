@@ -50,7 +50,6 @@ type kind_texture =
   | Icon_speed_boost_rare
   | Icon_2x
   | Icon_bomb
-  | Icon_pause
   | Icon_god_mode
   | Icon_background
   | Final_screen
@@ -115,8 +114,6 @@ let load_all _dt =
     (Gfx.load_image ctx "resources/images/icon_bomb.png");
   Hashtbl.replace textures Icon_god_mode
     (Gfx.load_image ctx "resources/images/icon_god_mode.png");
-  Hashtbl.replace textures Icon_pause
-    (Gfx.load_image ctx "resources/images/icon_pause.png");
   Hashtbl.replace textures Icon_background
     (Gfx.load_image ctx "resources/images/icon_bg.png");
 
