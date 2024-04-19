@@ -50,10 +50,10 @@ let asteroid_size = 60
 let no_spawn = ref false
 
 let bonus_drop_rate, set_bonus_only, reset_bonus_drop_rate =
-  let drop_rate = ref 5 in
+  let drop_rate = ref 10 in
   ( (fun () -> !drop_rate)
   , (fun () -> drop_rate := 100)
-  , fun () -> drop_rate := 5 )
+  , fun () -> drop_rate := 10 )
 
 (* GRAVITY *)
 let gravity, set_gravity =
