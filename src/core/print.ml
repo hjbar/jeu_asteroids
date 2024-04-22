@@ -105,16 +105,14 @@ let print () =
     Gfx.blit_full ctx
       (Gfx.get_surface (Global.window ()))
       icon 0 0 32 32 (x + 12) (y + 8) (size - 18) (size - 18)
-  end;
-  Gfx.commit ctx
+  end
 
 let pause_screen () =
   let img = Gfx.get_resource (Texture.get Pause_screen) in
   let ctx = Gfx.get_context (Global.window ()) in
   Gfx.blit_full ctx
     (Gfx.get_surface (Global.window ()))
-    img 0 0 2048 1024 0 0 Global.width Global.height;
-  Gfx.commit ctx
+    img 0 0 2048 1024 0 0 Global.width Global.height
 
 let game_over () =
   let ctx = Gfx.get_context (Global.window ()) in
@@ -130,5 +128,4 @@ let game_over () =
   Gfx.blit_full ctx
     (Gfx.get_surface (Global.window ()))
     img 0 0 2048 1024 0 0 Global.width Global.height;
-  Gfx.blit ctx (Gfx.get_surface (Global.window ())) s x y;
-  Gfx.commit ctx
+  Gfx.blit ctx (Gfx.get_surface (Global.window ())) s x y

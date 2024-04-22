@@ -49,11 +49,13 @@ let update config dt =
     Print.print ();
 
     (* On vérifie si on doit continuer *)
-    if Ovni.is_alive () then true
+    let res = if Ovni.is_alive () then true
     else begin
       Print.game_over ();
       false
-    end
+    end in
+    Gfx.commit (Gfx.get_context (Global.window ()));
+    res
   end
 
 (* Fonction utilitaire pour gérer Gfx.main_loop *)

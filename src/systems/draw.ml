@@ -53,6 +53,4 @@ let update _dt el =
     match !Entities.nuclear_background with
     | None -> failwith "nuclear_background not init"
     | Some b -> draw ctx win_surf b
-  end;
-
-  Gfx.commit ctx
+  end
