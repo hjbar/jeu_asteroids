@@ -6,6 +6,20 @@
 <h3> Comment compiler le projet </h3>
 
 <p>
+Dépendances :
+  - ocaml
+  - js_of_ocaml
+  - js_of_ocaml-ppx
+  - pps
+  - dune
+  - tsdl
+  - tsdl*-image
+  - tsdl-mixer
+  - tsdl-ttf
+  - ocamlformat
+</p>
+
+<p>
 Construire le projet : make
 <br>
 <br>  
