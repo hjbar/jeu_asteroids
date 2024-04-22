@@ -15,7 +15,7 @@ Dépendances :
   - pps
   - dune
   - tsdl
-  - tsdl*-image
+  - tsdl-image
   - tsdl-mixer
   - tsdl-ttf
   - ocamlformat
