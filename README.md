@@ -6,6 +6,8 @@
 <h3> Comment compiler le projet </h3>
 
 <p>
+La liste des dépendances du projet.
+
 Dépendances :
   - ocaml
   - js_of_ocaml
