@@ -31,10 +31,12 @@ let update config dt =
   (* On choisit quoi faire selon l'état du jeu *)
   if is_quit config then begin
     Print.game_over ();
+    Gfx.commit (Gfx.get_context (Global.window ()));
     false
   end
   else if !Global.break then begin
     Print.pause_screen ();
+    Gfx.commit (Gfx.get_context (Global.window ()));
     true
   end
   else begin
@@ -49,11 +51,13 @@ let update config dt =
     Print.print ();
 
     (* On vérifie si on doit continuer *)
-    let res = if Ovni.is_alive () then true
-    else begin
-      Print.game_over ();
-      false
-    end in
+    let res =
+      if Ovni.is_alive () then true
+      else begin
+        Print.game_over ();
+        false
+      end
+    in
     Gfx.commit (Gfx.get_context (Global.window ()));
     res
   end
